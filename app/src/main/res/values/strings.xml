@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">KotlinInstagramFirebaseChat</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login">login</string>
+    <string name="password">password</string>
+    <string name="loginfragment">LoginFragment</string>
+    <string name="register_text">Don\'t have an account? sing up!</string>
+    <string name="name">name</string>
+    <string name="sign_up">sign up</string>
 </resources>
