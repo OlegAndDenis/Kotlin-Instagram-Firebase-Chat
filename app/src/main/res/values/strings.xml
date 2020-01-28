@@ -9,4 +9,6 @@
     <string name="register_text">Don\'t have an account? sing up!</string>
     <string name="name">name</string>
     <string name="sign_up">sign up</string>
+    <string name="chats">chats</string>
+    <string name="login_empty_fields">Please fill all the fields</string>
 </resources>

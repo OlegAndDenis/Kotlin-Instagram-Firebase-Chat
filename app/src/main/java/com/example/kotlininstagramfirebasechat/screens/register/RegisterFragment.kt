@@ -8,9 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 
 import com.example.kotlininstagramfirebasechat.R
+import com.example.kotlininstagramfirebasechat.models.User
+import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.fragment_register.*
 
 /**
@@ -18,8 +22,17 @@ import kotlinx.android.synthetic.main.fragment_register.*
  */
 class RegisterFragment : Fragment() {
 
+    private lateinit var firebase: FirebaseHelper
+    private lateinit var user: User
+
     companion object {
         val TAG = RegisterFragment::class.java.simpleName
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        firebase = FirebaseHelper()
+        user = User()
     }
 
     override fun onCreateView(
@@ -45,17 +58,30 @@ class RegisterFragment : Fragment() {
             return
         }
 
-        // Firebase Authentication to create a user with email and password
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if (!it.isSuccessful) return@addOnCompleteListener
 
-                // else if successful
-                Log.d(TAG, "Successfully created user with uid: ${it.result?.user?.uid}")
+                val uid = it.result?.user?.uid ?: "error"
+                val ref = firebase.database.child("users").child(uid)
+                ref.setValue(User(uid = uid, name = name, email = email))
+                    .addOnSuccessListener {
+                        Log.d(TAG, "Successfully created user with uid: $uid")
+                        navigateToMain()
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d(TAG, "Failed to set value to database: ${exception.message}")
+                    }
+
+                Log.d(TAG, "Successfully created user with uid: $uid")
             }
             .addOnFailureListener {
                 Log.d(TAG, "Failed to create user: ${it.message}")
                 Toast.makeText(context, "${it.message}", Toast.LENGTH_LONG).show()
             }
+    }
+
+    private fun navigateToMain() {
+        findNavController().navigate(RegisterFragmentDirections.actionRegisterToMain())
     }
 }
