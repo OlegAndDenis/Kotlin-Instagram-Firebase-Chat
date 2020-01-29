@@ -53,6 +53,9 @@ dependencies {
 
     // Circle Image View
     implementation "de.hdodenhof:circleimageview:3.0.1"
+
+    // Groupie - for complex recycler views
+    implementation "com.xwray:groupie:2.1.0"
 }
 
 apply plugin: 'com.google.gms.google-services'
