@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_register.*
 /**
  * A simple [Fragment] subclass.
  */
-class RegisterFragment : Fragment() {
+class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private lateinit var firebase: FirebaseHelper
     private lateinit var user: User
@@ -33,14 +33,6 @@ class RegisterFragment : Fragment() {
         super.onCreate(savedInstanceState)
         firebase = FirebaseHelper()
         user = User()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,7 +59,6 @@ class RegisterFragment : Fragment() {
                 ref.setValue(User(uid = uid, name = name, email = email))
                     .addOnSuccessListener {
                         Log.d(TAG, "Successfully created user with uid: $uid")
-                        navigateToMain()
                     }
                     .addOnFailureListener { exception ->
                         Log.d(TAG, "Failed to set value to database: ${exception.message}")
@@ -79,9 +70,5 @@ class RegisterFragment : Fragment() {
                 Log.d(TAG, "Failed to create user: ${it.message}")
                 Toast.makeText(context, "${it.message}", Toast.LENGTH_LONG).show()
             }
-    }
-
-    private fun navigateToMain() {
-        findNavController().navigate(RegisterFragmentDirections.actionRegisterToMain())
     }
 }

@@ -39,16 +39,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun tryToLogin(email: String, password: String) {
         firebase.auth.signInWithEmailAndPassword(email, password)
-            .addOnSuccessListener { navigateToMain() }
+            .addOnSuccessListener {  }
             .addOnFailureListener { showToast(it.message) }
     }
 
     private fun showToast(message: String?) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun navigateToMain() {
-        findNavController().navigate(LoginFragmentDirections.actionLoginToMain())
     }
 
     private fun navigateToRegister() {
