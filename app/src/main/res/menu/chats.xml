@@ -6,5 +6,5 @@
         android:id="@+id/chatsFragment"
         android:title="@string/chats"
         android:icon="@drawable/ic_chats"
-        app:showAsAction="ifRoom|withText"/>
+        app:showAsAction="ifRoom"/>
 </menu>

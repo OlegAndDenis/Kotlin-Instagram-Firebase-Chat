@@ -7,4 +7,6 @@ import com.google.firebase.database.FirebaseDatabase
 class FirebaseHelper {
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
     val database: DatabaseReference = FirebaseDatabase.getInstance().reference
+
+    fun currentUserReference(): DatabaseReference = database.child("users").child(auth.currentUser!!.uid)
 }

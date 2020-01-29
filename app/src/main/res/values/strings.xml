@@ -22,4 +22,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="home">Home</string>
     <string name="profile">Profile</string>
+    <string name="edit_profile">edit profile</string>
+    <string name="sign_out">sign out</string>
+    <string name="search">search</string>
 </resources>
