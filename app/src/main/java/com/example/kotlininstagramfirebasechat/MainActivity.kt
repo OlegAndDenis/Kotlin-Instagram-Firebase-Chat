@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
             navController.addOnDestinationChangedListener { _, destination, _ ->
                 when (destination.id) {
                     R.id.chatsFragment -> hideBottomNav()
+                    R.id.chatFragment -> hideBottomNav()
                     else -> showBottomNav()
                 }
             }

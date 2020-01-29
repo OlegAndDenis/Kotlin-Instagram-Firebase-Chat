@@ -10,5 +10,18 @@
         android:id="@+id/searchFragment"
         android:name="com.example.kotlininstagramfirebasechat.screens.search.SearchFragment"
         android:label="Search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_search_to_chat"
+            app:destination="@id/chatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.kotlininstagramfirebasechat.screens.chat.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" >
+        <argument
+            android:name="companionUserUid"
+            app:argType="string" />
+    </fragment>
 </navigation>

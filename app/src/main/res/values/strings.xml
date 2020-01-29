@@ -25,4 +25,5 @@
     <string name="edit_profile">edit profile</string>
     <string name="sign_out">sign out</string>
     <string name="search">search</string>
+    <string name="type_a_message">Type a message</string>
 </resources>
