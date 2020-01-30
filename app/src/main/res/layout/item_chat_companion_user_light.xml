@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/textview_to_row_light"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="66dp"
-    android:layout_marginBottom="8dp"
-    android:background="@drawable/bg_chat_companion_user_light"
-    android:maxWidth="240dp"
-    android:paddingStart="26dp"
-    android:paddingTop="8dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="8dp"
-    tools:text="This is my message that will wrap into multiple lines and keep going" />
+    <TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/textview_to_row_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="66dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_chat_companion_user_light"
+        android:paddingStart="26dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:layout_marginEnd="18dp"
+        tools:text="This is my messagdsasdf dsasd sd sd dsewf wewef awef we" />

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -10,16 +9,15 @@
         android:id="@+id/textview_from_row_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="66dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/bg_chat_current_user_light"
-        android:maxWidth="240dp"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
         android:paddingEnd="26dp"
+        android:layout_gravity="end"
         android:paddingBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="This is my message that will wrap into multiple lines and keep going" />
+        android:layout_marginStart="76dp"
+        tools:text="This is my message thadfh dfdh f dfh df df " />
 
 </FrameLayout>
