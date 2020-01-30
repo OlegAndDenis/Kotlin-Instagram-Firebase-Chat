@@ -1,4 +1,4 @@
-package com.example.kotlininstagramfirebasechat.screens.main
+package com.example.kotlininstagramfirebasechat.screens.home
 
 
 import android.os.Bundle
@@ -8,13 +8,18 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.kotlininstagramfirebasechat.R
+import com.example.kotlininstagramfirebasechat.models.ChatMessage
+import com.example.kotlininstagramfirebasechat.models.User
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
  * A simple [Fragment] subclass.
  */
 class HomeFragment : Fragment(R.layout.fragment_home) {
+
 
     companion object {
         val TAG = HomeFragment::class.java.simpleName
