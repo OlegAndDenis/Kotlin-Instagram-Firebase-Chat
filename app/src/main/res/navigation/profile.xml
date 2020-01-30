@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/profile"
-    app:startDestination="@id/profileFragment"
+    app:startDestination="@id/myProfileFragment"
     tools:ignore="UnusedNavigation">
 
     <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.example.kotlininstagramfirebasechat.screens.profile.ProfileFragment"
+        android:id="@+id/myProfileFragment"
+        android:name="com.example.kotlininstagramfirebasechat.screens.myProfile.MyProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_my_profile" />
 </navigation>

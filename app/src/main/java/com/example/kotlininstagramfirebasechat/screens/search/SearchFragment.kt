@@ -99,7 +99,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
                 adapter.setOnItemClickListener { item, _ ->
                     val userItem = item as UserItem
-                    val action = SearchFragmentDirections.actionSearchToChat(userItem.user.uid)
+                    val action = SearchFragmentDirections.actionSearchToProfile(userItem.user.uid)
                     findNavController().navigate(action)
                 }
 
