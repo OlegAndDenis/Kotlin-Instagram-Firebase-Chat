@@ -1,48 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.example.kotlininstagramfirebasechat.views.KeyBoardAvareScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".screens.login.LoginFragment">
+    tools:context=".screens.register.RegisterFragment">
 
-    <com.google.android.material.textfield.TextInputLayout style="@style/TextInputSizes">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/register_name_input"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="@string/name"
-            android:importantForAutofill="no"
-            android:inputType="textPersonName" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout style="@style/TextInputSizes">
 
-    <com.google.android.material.textfield.TextInputLayout style="@style/TextInputSizes">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/register_name_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/name"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName|textCapWords" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/register_email_input"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="@string/login"
-            android:importantForAutofill="no"
-            android:inputType="textEmailAddress" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout style="@style/TextInputSizes">
 
-    <com.google.android.material.textfield.TextInputLayout style="@style/TextInputSizes">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/register_email_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/login"
+                android:importantForAutofill="no"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/register_password_input"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="@string/password"
-            android:importantForAutofill="no"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout style="@style/TextInputSizes">
 
-    <Button
-        android:id="@+id/register_sign_up_button"
-        style="@style/ButtonSizes"
-        android:text="@string/sign_up" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/register_password_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/password"
+                android:importantForAutofill="no"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/register_sign_up_button"
+            style="@style/ButtonSizes"
+            android:text="@string/sign_up" />
+
+    </LinearLayout>
+</com.example.kotlininstagramfirebasechat.views.KeyBoardAvareScrollView>

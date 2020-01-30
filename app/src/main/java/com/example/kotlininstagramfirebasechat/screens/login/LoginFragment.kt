@@ -9,12 +9,15 @@ import androidx.navigation.fragment.findNavController
 
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
+import com.example.kotlininstagramfirebasechat.utils.coordinateBtnAndInputs
 import kotlinx.android.synthetic.main.fragment_login.*
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
 /**
  * A simple [Fragment] subclass.
  */
-class LoginFragment : Fragment(R.layout.fragment_login) {
+class LoginFragment : Fragment(R.layout.fragment_login), KeyboardVisibilityEventListener {
     private lateinit var firebase: FirebaseHelper
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,6 +52,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun navigateToRegister() {
         findNavController().navigate(LoginFragmentDirections.actionLoginToRegister())
+    }
+
+    override fun onVisibilityChanged(isOpen: Boolean) {
+        KeyboardVisibilityEvent.setEventListener(activity, this)
+        coordinateBtnAndInputs(login_sign_in_button, login_email_input, login_password_input)
     }
 
 
