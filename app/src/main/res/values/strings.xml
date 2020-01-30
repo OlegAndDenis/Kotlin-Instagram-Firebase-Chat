@@ -24,7 +24,7 @@
     <string name="profile">Profile</string>
     <string name="edit_profile">edit profile</string>
     <string name="sign_out">sign out</string>
-    <string name="search">search</string>
+    <string name="search">Search</string>
     <string name="type_a_message">Type a message</string>
     <string name="send_message">send message</string>
 </resources>

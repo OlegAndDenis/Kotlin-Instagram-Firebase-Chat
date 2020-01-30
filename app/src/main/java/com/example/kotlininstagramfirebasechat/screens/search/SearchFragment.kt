@@ -3,8 +3,11 @@ package com.example.kotlininstagramfirebasechat.screens.search
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.navigation.fragment.findNavController
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
@@ -18,16 +21,61 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.item_new_user.view.*
+import java.util.*
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
+
+    var searchList: MutableList<User> = mutableListOf()
+    var adapter = GroupAdapter<ViewHolder>()
 
     companion object {
         private val TAG = SearchFragment::class.java.simpleName
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate")
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search, menu)
+        val searchItem = menu.findItem(R.id.action_search)
+        if (searchItem != null) {
+            val searchView = searchItem.actionView as SearchView
+            searchView.run {
+                isIconified = false
+                onActionViewExpanded()
+                maxWidth = Int.MAX_VALUE
+                setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return true
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        adapter.clear()
+                        val currentList = searchList
+                        if (newText != null) {
+                            val search = newText.toLowerCase(Locale.getDefault())
+                            currentList.forEach {
+                                if (it.name.toLowerCase(Locale.getDefault()).contains(search)) {
+                                    adapter.add(UserItem(it))
+                                }
+                            }
+                        }
+                        return true
+                    }
+                })
+            }
+            super.onCreateOptionsMenu(menu, inflater)
+        }
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fetchUsers()
+        Log.d(TAG, "onViewCreated")
+            fetchUsers()
     }
 
     private fun fetchUsers() {
@@ -36,13 +84,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             override fun onCancelled(databaseError: DatabaseError) {}
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val adapter = GroupAdapter<ViewHolder>()
+                searchList.clear()
+                adapter.clear()
 
                 dataSnapshot.children.forEach {
                     Log.d(TAG, it.toString())
                     it.getValue(User::class.java)?.let { user ->
                         if (user.uid != FirebaseAuth.getInstance().uid) {
                             adapter.add(UserItem(user))
+                            searchList.add(user)
                         }
                     }
                 }
