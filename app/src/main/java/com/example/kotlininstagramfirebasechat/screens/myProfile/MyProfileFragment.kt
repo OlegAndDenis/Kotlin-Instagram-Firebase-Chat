@@ -52,6 +52,7 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
         firebase.auth.signOut()
         return true
     }
+
 }
 
 

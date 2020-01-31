@@ -62,7 +62,6 @@ class MainActivity : AppCompatActivity() {
             setupActionBarWithNavController(navController)
             navController.addOnDestinationChangedListener { _, destination, _ ->
                 when (destination.id) {
-                    R.id.chatsFragment -> hideBottomNav()
                     R.id.chatFragment -> hideBottomNav()
                     else -> showBottomNav()
                 }
@@ -83,4 +82,5 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return currentNavController?.value?.navigateUp() ?: false
     }
+
 }

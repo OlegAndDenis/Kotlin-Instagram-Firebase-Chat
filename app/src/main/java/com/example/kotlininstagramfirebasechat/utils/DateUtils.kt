@@ -36,11 +36,11 @@ object DateUtils {
 
     }
 
-    fun isYesterday(d: Date): Boolean {
+    private fun isYesterday(d: Date): Boolean {
         return DateUtils.isToday(d.time + DateUtils.DAY_IN_MILLIS)
     }
 
-    fun isToday(d: Date): Boolean {
+    private fun isToday(d: Date): Boolean {
         return DateUtils.isToday(d.time)
     }
 }

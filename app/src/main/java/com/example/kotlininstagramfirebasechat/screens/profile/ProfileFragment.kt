@@ -4,11 +4,8 @@ package com.example.kotlininstagramfirebasechat.screens.profile
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.User
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
@@ -17,9 +14,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_profile.*
 
-/**
- * A simple [Fragment] subclass.
- */
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private lateinit var uid: String
@@ -38,7 +32,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         arguments?.let {
             uid = ProfileFragmentArgs.fromBundle(it).UserUid
 
-            firebase.UserReference(uid).addListenerForSingleValueEvent(object: ValueEventListener {
+            firebase.userReference(uid).addListenerForSingleValueEvent(object: ValueEventListener {
 
                 override fun onDataChange(data: DataSnapshot) {
                     val user = data.getValue(User::class.java)

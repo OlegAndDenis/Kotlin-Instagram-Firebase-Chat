@@ -4,22 +4,14 @@ package com.example.kotlininstagramfirebasechat.screens.register
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.navigation.fragment.findNavController
-
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.User
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
+import com.example.kotlininstagramfirebasechat.utils.showToast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.fragment_register.*
 
-/**
- * A simple [Fragment] subclass.
- */
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private lateinit var firebase: FirebaseHelper
@@ -46,16 +38,15 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         val name = register_name_input.text.toString()
 
         if (email.isEmpty() || password.isEmpty() || name.isEmpty()) {
-            Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_SHORT).show()
+            showToast(context, "Please fill all the fields")
             return
         }
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                if (!it.isSuccessful) return@addOnCompleteListener
-
-                val uid = it.result?.user?.uid ?: "error"
+            .addOnSuccessListener {
+                val uid = it.user?.uid ?: "error"
                 val ref = firebase.database.child("users").child(uid)
+
                 ref.setValue(User(uid = uid, name = name, email = email))
                     .addOnSuccessListener {
                         Log.d(TAG, "Successfully created user with uid: $uid")
@@ -68,7 +59,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
             .addOnFailureListener {
                 Log.d(TAG, "Failed to create user: ${it.message}")
-                Toast.makeText(context, "${it.message}", Toast.LENGTH_LONG).show()
+                showToast(context, it.message)
             }
     }
+
 }

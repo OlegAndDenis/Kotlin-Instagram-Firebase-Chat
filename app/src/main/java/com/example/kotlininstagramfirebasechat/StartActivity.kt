@@ -33,4 +33,5 @@ class StartActivity : AppCompatActivity() {
         val navController = this.findNavController(R.id.nav_host_fragment_start)
         return navController.navigateUp()
     }
+    
 }

@@ -1,21 +1,18 @@
 package com.example.kotlininstagramfirebasechat.screens.chat
 
 
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import com.example.kotlininstagramfirebasechat.MainActivity
-
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.ChatMessage
 import com.example.kotlininstagramfirebasechat.models.User
 import com.example.kotlininstagramfirebasechat.utils.DateUtils.getFormattedTimeChatLog
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
+import com.example.kotlininstagramfirebasechat.utils.hideKeyboard
+import com.example.kotlininstagramfirebasechat.utils.showToast
 import com.google.firebase.database.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
@@ -33,7 +30,6 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         val TAG = ChatFragment::class.java.simpleName
     }
 
-    var sameUser = User()
     private var companionUser = User()
     private var currentUser = User()
     private lateinit var firebase: FirebaseHelper
@@ -58,7 +54,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
         arguments?.let {
             val uid = ChatFragmentArgs.fromBundle(it).companionUserUid
-            firebase.UserReference(uid).addListenerForSingleValueEvent(object : ValueEventListener {
+            firebase.userReference(uid).addListenerForSingleValueEvent(object : ValueEventListener {
 
                 override fun onDataChange(data: DataSnapshot) {
                     companionUser = data.getValue(User::class.java) ?: User()
@@ -74,16 +70,14 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
         recyclerview_chat_log.adapter = adapter
 
-        send_button_chat_log.setOnClickListener {
-            performSendMessage()
-        }
+        send_button_chat_log.setOnClickListener { performSendMessage() }
     }
 
     private fun listenForMessages() {
         var sameUser = User().uid
         val fromId = currentUser.uid
         val toId = companionUser.uid
-        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
+        val ref = firebase.messages(fromId, toId)
 
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
@@ -96,31 +90,29 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         })
 
         ref.addChildEventListener(object : ChildEventListener {
-            override fun onCancelled(databaseError: DatabaseError) {
-            }
+            override fun onCancelled(databaseError: DatabaseError) {}
 
-            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
-            }
+            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {}
 
-            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
-            }
+            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {}
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
 
                 dataSnapshot.getValue(ChatMessage::class.java)?.let {
+
                     if (it.fromId == currentUser.uid) {
                         if (it.fromId == sameUser) {
                             adapter.add(ChatFromItemLight(it.text))
                         } else {
                             sameUser = it.fromId
-                            adapter.add(ChatFromItem(it.text, currentUser, it.timestamp))
+                            adapter.add(ChatFromItem(it.text, it.timestamp))
                         }
                     } else {
                         if (it.fromId == sameUser) {
                             adapter.add(ChatToItemLight(it.text))
                         } else {
                             sameUser = it.fromId
-                            adapter.add(ChatToItem(it.text, companionUser, it.timestamp))
+                            adapter.add(ChatToItem(it.text, it.timestamp))
                         }
                     }
                 }
@@ -131,25 +123,19 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                 }
             }
 
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-            }
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
         })
     }
 
     private fun performSendMessage() {
         val text = edittext_chat_log.text.toString()
-        if (text.isEmpty()) {
-            Toast.makeText(context, "Message cannot be empty", Toast.LENGTH_SHORT).show()
-            return
-        }
+        if (text.isEmpty()) return
 
         val fromId = currentUser.uid
         val toId = companionUser.uid
 
-        val reference =
-            FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push()
-        val toReference =
-            FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId").push()
+        val reference = firebase.messages(fromId, toId).push()
+        val toReference = firebase.messages(toId, fromId).push()
 
         val chatMessage =
             ChatMessage(reference.key!!, text, fromId, toId, System.currentTimeMillis() / 1000)
@@ -162,27 +148,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
         toReference.setValue(chatMessage)
 
-
-        val latestMessageRef =
-            FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
-        latestMessageRef.setValue(chatMessage)
-
-        val latestMessageToRef =
-            FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
-        latestMessageToRef.setValue(chatMessage)
-    }
-
-    private fun hideKeyboard(activity: Activity) {
-        val inputMethodManager =
-            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
-        // Check if no view has focus
-        val currentFocusedView = activity.currentFocus
-        currentFocusedView?.let {
-            inputMethodManager.hideSoftInputFromWindow(
-                currentFocusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
-            )
-        }
+        firebase.latestMessages(fromId, toId).setValue(chatMessage)
+        firebase.latestMessages(toId, fromId).setValue(chatMessage)
     }
 
     override fun onDestroy() {
@@ -192,7 +159,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
 }
 
-class ChatFromItem(val text: String, private val user: User, private val timestamp: Long) :
+class ChatFromItem(val text: String, private val timestamp: Long) :
     Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -210,7 +177,7 @@ class ChatFromItem(val text: String, private val user: User, private val timesta
 
 }
 
-class ChatToItem(val text: String, private val user: User, private val timestamp: Long) :
+class ChatToItem(val text: String, private val timestamp: Long) :
     Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {

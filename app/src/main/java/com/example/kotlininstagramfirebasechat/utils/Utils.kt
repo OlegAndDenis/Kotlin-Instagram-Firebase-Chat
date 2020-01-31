@@ -1,21 +1,23 @@
 package com.example.kotlininstagramfirebasechat.utils
 
-import android.text.Editable
-import android.text.TextWatcher
-import android.widget.Button
-import android.widget.EditText
+import android.app.Activity
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 
-fun coordinateBtnAndInputs(btn: Button, vararg inputs: EditText) {
-    val watcher = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            btn.isEnabled = inputs.all { it.text.isNotEmpty() }
-        }
+fun hideKeyboard(activity: Activity) {
+    val inputMethodManager =
+        activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
+    // Check if no view has focus
+    val currentFocusedView = activity.currentFocus
+    currentFocusedView?.let {
+        inputMethodManager.hideSoftInputFromWindow(
+            currentFocusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
+        )
     }
-    inputs.forEach { it.addTextChangedListener(watcher) }
-    btn.isEnabled = inputs.all { it.text.isNotEmpty() }
+}
+
+fun showToast(context: Context?, message: String?, duration: Int = Toast.LENGTH_SHORT) {
+    Toast.makeText(context, message, duration).show()
 }
