@@ -6,9 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import com.example.kotlininstagramfirebasechat.R
-import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
-import com.example.kotlininstagramfirebasechat.utils.showToast
+import com.example.kotlininstagramfirebasechat.utils.*
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.progress_bar.*
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
@@ -16,6 +16,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        coordinateBtnAndInputs(login_sign_in_button, login_email_input, login_password_input)
 
         firebase = FirebaseHelper()
 
@@ -35,9 +37,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun tryToLogin(email: String, password: String) {
+        progress_bar.showView()
         firebase.auth.signInWithEmailAndPassword(email, password)
-            .addOnSuccessListener {  }
-            .addOnFailureListener { showToast(context, it.message) }
+            .addOnFailureListener {
+                showToast(context, it.message)
+            }
+            .addOnCompleteListener { progress_bar.hideView() }
     }
 
     private fun navigateToRegister() {

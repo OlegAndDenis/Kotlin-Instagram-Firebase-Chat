@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <com.example.kotlininstagramfirebasechat.views.KeyBoardAvareScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".screens.login.LoginFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout style="@style/TextInputSizes">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/login_email_input_layout"
+            style="@style/TextInputSizes"
+            app:layout_constraintBottom_toTopOf="@id/login_password_input_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_email_input"
@@ -23,7 +31,13 @@
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout style="@style/TextInputSizes">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/login_password_input_layout"
+            style="@style/TextInputSizes"
+            app:layout_constraintBottom_toTopOf="@id/login_sign_in_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/login_email_input_layout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_password_input"
@@ -37,14 +51,26 @@
         <Button
             android:id="@+id/login_sign_in_button"
             style="@style/ButtonSizes"
-            android:text="@string/common_signin_button_text" />
+            android:text="@string/common_signin_button_text"
+            android:stateListAnimator="@animator/button_animator"
+            app:layout_constraintBottom_toTopOf="@id/login_register_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/login_password_input_layout" />
 
         <TextView
             android:id="@+id/login_register_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/register_text" />
+            android:text="@string/register_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/login_sign_in_button" />
 
-    </LinearLayout>
+        <include layout="@layout/progress_bar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </com.example.kotlininstagramfirebasechat.views.KeyBoardAvareScrollView>

@@ -17,11 +17,14 @@ import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.User
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
 import com.example.kotlininstagramfirebasechat.utils.hideKeyboard
+import com.example.kotlininstagramfirebasechat.utils.hideView
+import com.example.kotlininstagramfirebasechat.utils.showView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.item_new_user.view.*
+import kotlinx.android.synthetic.main.progress_bar.*
 import java.util.*
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
@@ -78,10 +81,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated")
-            fetchUsers()
+        fetchUsers()
     }
 
     private fun fetchUsers() {
+        progress_bar.showView()
         val ref = firebase.database.child("users")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -107,6 +111,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 }
 
                 recyclerview_newmessage.adapter = adapter
+                progress_bar.hideView()
             }
         })
     }

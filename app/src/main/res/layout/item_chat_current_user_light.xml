@@ -9,15 +9,16 @@
         android:id="@+id/textview_from_row_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginStart="76dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/bg_chat_current_user_light"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
         android:paddingEnd="26dp"
-        android:layout_gravity="end"
         android:paddingBottom="8dp"
-        android:layout_marginStart="76dp"
+        android:textSize="16sp"
         tools:text="This is my message thadfh dfdh f dfh df df " />
 
 </FrameLayout>

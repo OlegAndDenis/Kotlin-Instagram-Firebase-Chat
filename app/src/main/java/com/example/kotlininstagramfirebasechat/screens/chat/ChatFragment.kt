@@ -9,10 +9,8 @@ import com.example.kotlininstagramfirebasechat.MainActivity
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.ChatMessage
 import com.example.kotlininstagramfirebasechat.models.User
+import com.example.kotlininstagramfirebasechat.utils.*
 import com.example.kotlininstagramfirebasechat.utils.DateUtils.getFormattedTimeChatLog
-import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
-import com.example.kotlininstagramfirebasechat.utils.hideKeyboard
-import com.example.kotlininstagramfirebasechat.utils.showToast
 import com.google.firebase.database.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
@@ -22,9 +20,12 @@ import kotlinx.android.synthetic.main.item_chat_companion_user.view.*
 import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.item_chat_companion_user_light.view.*
 import kotlinx.android.synthetic.main.item_chat_current_user_light.view.*
+import kotlinx.android.synthetic.main.progress_bar.*
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 import java.lang.Exception
 
-class ChatFragment : Fragment(R.layout.fragment_chat) {
+class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventListener {
 
     companion object {
         val TAG = ChatFragment::class.java.simpleName
@@ -38,6 +39,11 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        progress_bar.showView()
+
+        KeyboardVisibilityEvent.setEventListener(activity as MainActivity, this)
+        coordinateImgBtnAndInputs(chat_send_button, chat_message_input)
 
         firebase = FirebaseHelper()
         firebase.currentUserReference().addListenerForSingleValueEvent(object : ValueEventListener {
@@ -68,9 +74,9 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
             })
         }
 
-        recyclerview_chat_log.adapter = adapter
+        chat_recyclerview.adapter = adapter
 
-        send_button_chat_log.setOnClickListener { performSendMessage() }
+        chat_send_button.setOnClickListener { performSendMessage() }
     }
 
     private fun listenForMessages() {
@@ -116,19 +122,18 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
                         }
                     }
                 }
-                try {
-                    recyclerview_chat_log.scrollToPosition(adapter.itemCount - 1)
-                } catch (e: Exception) {
-                    Log.d(TAG, e.message ?: return)
-                }
+
+                scrollChatDown()
             }
 
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
         })
+
+        progress_bar.hideView()
     }
 
     private fun performSendMessage() {
-        val text = edittext_chat_log.text.toString()
+        val text = chat_message_input.text.toString()
         if (text.isEmpty()) return
 
         val fromId = currentUser.uid
@@ -142,8 +147,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         reference.setValue(chatMessage)
             .addOnSuccessListener {
                 Log.d(TAG, "Saved our chat message: ${reference.key}")
-                edittext_chat_log.text.clear()
-                recyclerview_chat_log.smoothScrollToPosition(adapter.itemCount - 1)
+                chat_message_input.text.clear()
+                scrollChatDown()
             }
 
         toReference.setValue(chatMessage)
@@ -155,6 +160,18 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     override fun onDestroy() {
         super.onDestroy()
         hideKeyboard(activity as MainActivity)
+    }
+
+    override fun onVisibilityChanged(isOpen: Boolean) {
+        scrollChatDown()
+    }
+
+    private fun scrollChatDown() {
+        try {
+            chat_recyclerview.scrollToPosition(adapter.itemCount - 1)
+        } catch (e: Exception) {
+            Log.d(TAG, e.message ?: return)
+        }
     }
 
 }

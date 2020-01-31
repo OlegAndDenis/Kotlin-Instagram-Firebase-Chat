@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="16dp"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorSecondaryText"
                 android:textSize="13sp"
                 tools:text="16 Sep, 2:05 PM" />
 

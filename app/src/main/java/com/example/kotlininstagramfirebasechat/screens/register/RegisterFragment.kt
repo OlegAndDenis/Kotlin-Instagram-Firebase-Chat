@@ -7,10 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.User
-import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
-import com.example.kotlininstagramfirebasechat.utils.showToast
+import com.example.kotlininstagramfirebasechat.utils.*
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_register.*
+import kotlinx.android.synthetic.main.progress_bar.*
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
@@ -29,6 +29,12 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        coordinateBtnAndInputs(
+            register_sign_up_button,
+            register_name_input,
+            register_email_input,
+            register_password_input
+        )
         register_sign_up_button.setOnClickListener { performRegistration() }
     }
 
@@ -41,6 +47,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             showToast(context, "Please fill all the fields")
             return
         }
+
+        progress_bar.showView()
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener {
@@ -61,6 +69,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 Log.d(TAG, "Failed to create user: ${it.message}")
                 showToast(context, it.message)
             }
+            .addOnCompleteListener { progress_bar.hideView() }
     }
 
 }

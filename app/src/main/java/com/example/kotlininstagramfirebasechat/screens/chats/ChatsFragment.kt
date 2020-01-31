@@ -9,10 +9,14 @@ import androidx.navigation.fragment.findNavController
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.ChatMessage
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
+import com.example.kotlininstagramfirebasechat.utils.hideView
+import com.example.kotlininstagramfirebasechat.utils.showView
 import com.google.firebase.database.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_chats.*
+import kotlinx.android.synthetic.main.progress_bar.*
+import java.lang.Exception
 
 class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
@@ -30,6 +34,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         firebase = FirebaseHelper()
 
         recyclerview_latest_messages.adapter = adapter
+
 
         listenForLatestMessages()
 
@@ -49,11 +54,18 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         latestMessagesMap.values.forEach {
             adapter.add(ChatsAdapter(it))
         }
+        try {
+            progress_bar.hideView()
+        } catch (e: Exception) {
+            Log.d(TAG, e.message ?: return)
+        }
     }
 
     private fun listenForLatestMessages() {
         val fromId = firebase.auth.uid ?: return
-        val ref = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId")
+        val ref = firebase.latestMessages(fromId, "")
+
+        progress_bar.showView()
 
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
 

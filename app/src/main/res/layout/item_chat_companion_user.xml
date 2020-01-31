@@ -38,6 +38,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="18dp"
             android:background="@drawable/bg_chat_companion_user"
+            android:textSize="16sp"
             android:paddingStart="26dp"
             android:paddingTop="8dp"
             android:paddingEnd="16dp"

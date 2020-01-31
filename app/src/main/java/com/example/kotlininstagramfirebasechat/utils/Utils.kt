@@ -1,8 +1,17 @@
 package com.example.kotlininstagramfirebasechat.utils
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 
 fun hideKeyboard(activity: Activity) {
@@ -18,6 +27,51 @@ fun hideKeyboard(activity: Activity) {
     }
 }
 
+fun View.showView() {
+    visibility = View.VISIBLE
+    animate().alpha(1.0f).setListener(object : AnimatorListenerAdapter() {})
+}
+
+fun View.hideView() {
+    animate().alpha(0.0f).setListener(object : AnimatorListenerAdapter() {
+
+        override fun onAnimationEnd(animation: Animator?) {
+            visibility = View.GONE
+        }
+
+    })
+}
+
 fun showToast(context: Context?, message: String?, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(context, message, duration).show()
+}
+
+fun coordinateBtnAndInputs(btn: Button, vararg inputs: EditText) {
+    val watcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            btn.isEnabled = inputs.all { it.text.isNotEmpty() }
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+    }
+    inputs.forEach { it.addTextChangedListener(watcher) }
+    btn.isEnabled = inputs.all { it.text.isNotEmpty() }
+}
+
+fun coordinateImgBtnAndInputs(btn: ImageButton, vararg inputs: EditText) {
+    val watcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            btn.isEnabled = inputs.all { it.text.isNotEmpty() }
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+    }
+    inputs.forEach { it.addTextChangedListener(watcher) }
+    btn.isEnabled = inputs.all { it.text.isNotEmpty() }
 }

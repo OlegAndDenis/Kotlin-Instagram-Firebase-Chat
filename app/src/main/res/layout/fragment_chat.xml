@@ -1,48 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.kotlininstagramfirebasechat.views.KeyBoardAvareScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".screens.chat.ChatFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_chat_log"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/colorBackground"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/buttons_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFF"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chat_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/colorBackground"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/chat_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/edittext_chat_log"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/chat_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:hint="@string/type_a_message" />
+            android:background="#FFF"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chat_recyclerview">
 
-        <ImageButton
-            android:id="@+id/send_button_chat_log"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="bottom"
-            android:background="?selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_send"
-            android:contentDescription="@string/send_message" />
+            <EditText
+                android:id="@+id/chat_message_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="@string/type_a_message"
+                android:importantForAutofill="no"
+                tools:ignore="TextFields" />
 
-    </LinearLayout>
-</LinearLayout>
+            <ImageButton
+                android:id="@+id/chat_send_button"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="bottom"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/send_message"
+                android:src="@drawable/ic_send"
+                android:stateListAnimator="@animator/button_animator" />
+        </LinearLayout>
+
+        <include layout="@layout/progress_bar" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.example.kotlininstagramfirebasechat.views.KeyBoardAvareScrollView>

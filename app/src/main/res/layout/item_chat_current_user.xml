@@ -30,6 +30,7 @@
         android:paddingEnd="26dp"
         android:paddingBottom="8dp"
         android:textColor="@android:color/black"
+        android:textSize="16sp"
         tools:text="This is my message that will wrap into multiple lines and keep going" />
 
 </LinearLayout>
