@@ -24,17 +24,31 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         val TAG = ChatsFragment::class.java.simpleName
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(TAG, "onDestroyView")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy")
+    }
+
     private lateinit var firebase: FirebaseHelper
     private val adapter = GroupAdapter<ViewHolder>()
     private val latestMessagesMap = HashMap<String, ChatMessage>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.d(TAG, "onViewCreated")
         firebase = FirebaseHelper()
 
         recyclerview_latest_messages.adapter = adapter
-
 
         listenForLatestMessages()
 
@@ -96,6 +110,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             override fun onChildRemoved(p0: DataSnapshot) {}
 
             private fun lastMessageChanged(dataSnapshot: DataSnapshot) {
+                Log.d(TAG, "latestMesssage call")
                 dataSnapshot.getValue(ChatMessage::class.java)?.let {
                     latestMessagesMap[dataSnapshot.key!!] = it
                     refreshRecyclerViewMessages()
