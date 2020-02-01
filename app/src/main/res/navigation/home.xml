@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.example.kotlininstagramfirebasechat.screens.chat.ChatFragment"
+        android:name="com.example.kotlininstagramfirebasechat.screens.chats.chat.ChatFragment"
         android:label="Chat"
         tools:layout="@layout/fragment_chat" >
         <argument android:name="companionUserUid"

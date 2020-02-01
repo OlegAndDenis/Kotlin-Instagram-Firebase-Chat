@@ -37,6 +37,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 override fun onDataChange(data: DataSnapshot) {
                     val user = data.getValue(User::class.java)
                     profile_name.text = user?.name
+                    profile_bio.text = user?.bio
                 }
 
                 override fun onCancelled(error: DatabaseError) {

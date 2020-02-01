@@ -32,4 +32,5 @@
     <string name="bio">bio</string>
     <string name="save">Save</string>
     <string name="please_enter_password">Please enter your password</string>
+    <string name="bio_helper_text">This information will be displayed in your profile</string>
 </resources>

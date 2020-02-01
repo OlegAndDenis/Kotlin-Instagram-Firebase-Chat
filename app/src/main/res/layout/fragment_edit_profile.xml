@@ -64,6 +64,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edit_profile_bio_input_layout"
+                app:helperText="@string/bio_helper_text"
                 style="@style/mainTextInputSizes"
                 android:background="#fafafa">
 

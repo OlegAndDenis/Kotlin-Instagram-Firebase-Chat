@@ -1,4 +1,4 @@
-package com.example.kotlininstagramfirebasechat.screens.login
+package com.example.kotlininstagramfirebasechat.screens.start.login
 
 
 import android.os.Bundle

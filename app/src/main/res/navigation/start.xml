@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.kotlininstagramfirebasechat.screens.login.LoginFragment"
+        android:name="com.example.kotlininstagramfirebasechat.screens.start.login.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.kotlininstagramfirebasechat.screens.register.RegisterFragment"
+        android:name="com.example.kotlininstagramfirebasechat.screens.start.register.RegisterFragment"
         android:label="Registration"
         tools:layout="@layout/fragment_register"/>
 </navigation>

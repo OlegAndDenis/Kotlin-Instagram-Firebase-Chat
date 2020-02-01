@@ -21,7 +21,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Denis"
+        android:textSize="18sp"
         android:layout_marginTop="@dimen/standard_margin"
+        android:layout_marginStart="@dimen/standard_margin"
+        android:layout_marginEnd="@dimen/standard_margin"/>
+
+    <TextView
+        android:id="@+id/my_profile_bio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Hi! I am Denis and it is beautiful"
+        android:textColor="@color/colorSecondaryText"
+        android:textSize="16sp"
         android:layout_marginStart="@dimen/standard_margin"
         android:layout_marginEnd="@dimen/standard_margin"/>
 
