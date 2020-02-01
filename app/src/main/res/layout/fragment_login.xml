@@ -15,7 +15,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_email_input_layout"
-            style="@style/TextInputSizes"
+            style="@style/startTextInputSizes"
             app:layout_constraintBottom_toTopOf="@id/login_password_input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_password_input_layout"
-            style="@style/TextInputSizes"
+            style="@style/startTextInputSizes"
             app:layout_constraintBottom_toTopOf="@id/login_sign_in_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

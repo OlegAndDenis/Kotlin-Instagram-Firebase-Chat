@@ -91,3 +91,8 @@ fun coordinateImgBtnAndInputs(btn: ImageButton, vararg inputs: EditText) {
     inputs.forEach { it.addTextChangedListener(watcher) }
     btn.isEnabled = inputs.all { it.text.isNotEmpty() }
 }
+
+fun Editable.toStringOrNull(): String? {
+    val str = toString()
+    return if (str.isEmpty()) null else str
+}

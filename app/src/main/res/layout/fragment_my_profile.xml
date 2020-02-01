@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".screens.myProfile.MyProfileFragment">
+    tools:context=".screens.profile.myProfile.MyProfileFragment">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="wrap_content"
@@ -26,6 +26,7 @@
         android:layout_marginEnd="@dimen/standard_margin"/>
 
     <Button
+        android:id="@+id/my_profile_to_edit_profile_button"
         style="@style/ButtonSizes"
         android:text="@string/edit_profile" />
 </LinearLayout>

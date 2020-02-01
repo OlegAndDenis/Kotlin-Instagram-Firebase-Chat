@@ -10,7 +10,15 @@
         <item name="android:textColor">@color/colorPrimaryText</item>
     </style>
 
-    <style name="TextInputSizes" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+    <style name="startTextInputSizes" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginStart">@dimen/standard_margin</item>
+        <item name="android:layout_marginEnd">@dimen/standard_margin</item>
+        <item name="android:layout_marginTop">10dp</item>
+    </style>
+
+    <style name="mainTextInputSizes" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginStart">@dimen/standard_margin</item>

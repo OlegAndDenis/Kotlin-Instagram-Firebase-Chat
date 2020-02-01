@@ -1,10 +1,11 @@
-package com.example.kotlininstagramfirebasechat.screens.myProfile
+package com.example.kotlininstagramfirebasechat.screens.profile.myProfile
 
 
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.User
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
@@ -33,7 +34,7 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
 
             override fun onDataChange(data: DataSnapshot) {
                 val user = data.getValue(User::class.java)
-                my_profile_name.text = user?.name
+                my_profile_name.text = user?.name ?: return
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -41,6 +42,10 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
             }
 
         })
+
+        my_profile_to_edit_profile_button.setOnClickListener {
+            findNavController().navigate(MyProfileFragmentDirections.actionMyProfileToEditProfile())
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

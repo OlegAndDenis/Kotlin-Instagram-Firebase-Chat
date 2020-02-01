@@ -8,7 +8,16 @@
 
     <fragment
         android:id="@+id/myProfileFragment"
-        android:name="com.example.kotlininstagramfirebasechat.screens.myProfile.MyProfileFragment"
+        android:name="com.example.kotlininstagramfirebasechat.screens.profile.myProfile.MyProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_my_profile" />
+        tools:layout="@layout/fragment_my_profile" >
+        <action
+            android:id="@+id/action_myProfile_to_editProfile"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.kotlininstagramfirebasechat.screens.profile.editProfile.EditProfileFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_edit_profile" />
 </navigation>

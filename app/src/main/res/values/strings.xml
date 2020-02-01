@@ -27,4 +27,8 @@
     <string name="search">Search</string>
     <string name="type_a_message">Type a message</string>
     <string name="send_message">send message</string>
+    <string name="change_profile_photo">Change Profile Photo</string>
+    <string name="email">e-mail</string>
+    <string name="bio">bio</string>
+    <string name="save">Save</string>
 </resources>

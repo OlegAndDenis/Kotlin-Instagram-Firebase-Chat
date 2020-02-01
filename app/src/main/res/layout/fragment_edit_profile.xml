@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.profile.editProfile.EditProfileFragment">
+
+    <ScrollView
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/edit_profile_image"
+                android:layout_width="wrap_content"
+                android:layout_height="125dp"
+                android:layout_marginTop="50dp"
+                android:src="@drawable/portrait_placeholder"
+                app:civ_border_color="@color/colorAccent"
+                app:civ_border_width="2dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/colorAccent"
+                android:paddingTop="8dp"
+                android:text="@string/change_profile_photo" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edit_profile_name_input_layout"
+                style="@style/mainTextInputSizes"
+                android:background="#fafafa">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_profile_name_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/name"
+                    android:importantForAutofill="no"
+                    android:inputType="textPersonName|textCapWords" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edit_profile_email_input_layout"
+                style="@style/mainTextInputSizes"
+                android:background="#fafafa">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_profile_email_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/email"
+                    android:importantForAutofill="no"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edit_profile_bio_input_layout"
+                style="@style/mainTextInputSizes"
+                android:background="#fafafa">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_profile_bio_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLength="120"
+                    android:maxLines="3"
+                    android:maxHeight="120dp"
+                    android:hint="@string/bio"
+                    android:importantForAutofill="no" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <include layout="@layout/progress_bar" />
+
+</FrameLayout>

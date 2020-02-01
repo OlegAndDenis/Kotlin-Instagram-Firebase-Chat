@@ -15,7 +15,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/register_name_input_layout"
-            style="@style/TextInputSizes"
+            style="@style/startTextInputSizes"
             app:layout_constraintBottom_toTopOf="@id/register_email_input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/register_email_input_layout"
-            style="@style/TextInputSizes"
+            style="@style/startTextInputSizes"
             app:layout_constraintTop_toBottomOf="@id/register_name_input_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,14 +43,14 @@
                 android:id="@+id/register_email_input"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:hint="@string/login"
+                android:hint="@string/email"
                 android:importantForAutofill="no"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/register_password_input_layout"
-            style="@style/TextInputSizes"
+            style="@style/startTextInputSizes"
             app:layout_constraintBottom_toTopOf="@id/register_sign_up_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
