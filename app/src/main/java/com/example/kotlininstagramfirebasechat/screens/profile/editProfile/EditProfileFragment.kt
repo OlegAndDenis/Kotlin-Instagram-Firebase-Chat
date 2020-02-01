@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.User
+import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
 import com.example.kotlininstagramfirebasechat.utils.showToast
 import com.example.kotlininstagramfirebasechat.utils.toStringOrNull
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -19,18 +22,19 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.*
 class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
 
     private var newUser = User()
+    private lateinit var firebase: FirebaseHelper
 
     companion object {
         val TAG = EditProfileFragment::class.java.simpleName
     }
 
-    private lateinit var viewModel: EditProfileViewModel
+    private val viewModel: EditProfileViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        viewModel = ViewModelProvider(this).get(EditProfileViewModel::class.java)
-        viewModel.firebase.currentUserReference().addListenerForSingleValueEvent(object:
+        firebase = FirebaseHelper()
+        firebase.currentUserReference().addListenerForSingleValueEvent(object:
             ValueEventListener {
 
             override fun onDataChange(data: DataSnapshot) {
@@ -45,13 +49,26 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
         })
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.user.observe(viewLifecycleOwner, Observer {
+            updateView(it)
+        })
+
+        viewModel.password.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "password: $it")
+            onPasswordConfirm(it)
+        })
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.update_user, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        updateUser()
+        if (item.itemId == R.id.update_user) updateUser()
         return super.onOptionsItemSelected(item)
     }
 
@@ -59,7 +76,11 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
         newUser = readInputs()
         val error = validate(newUser)
         if (error == null) {
-            updateUser2()
+            if (newUser.email == viewModel.user.value?.email) {
+                updateUser2()
+            } else {
+                findNavController().navigate(EditProfileFragmentDirections.actionEditProfileToEmailChangeDialog())
+            }
         } else {
             showToast(context, error)
         }
@@ -68,7 +89,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
     private fun updateUser2() {
         val updatesMap = viewModel.updateUserData(newUser)
 
-        viewModel.firebase.updateUser(updatesMap, context)
+        firebase.updateUser(updatesMap, context)
             showToast(context,"Profile saved")
 
     }
@@ -82,21 +103,28 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
     private fun readInputs(): User {
         return User(
             name = edit_profile_name_input.text.toString(),
-            bio = edit_profile_bio_input.text?.toStringOrNull()
+            email = edit_profile_email_input.text.toString(),
+            bio = edit_profile_bio_input.text!!.toStringOrNull()
         )
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.user.observe(viewLifecycleOwner, Observer {
-            updateView(it)
-        })
     }
 
     private fun updateView(user: User) {
         edit_profile_name_input.setText(user.name)
         edit_profile_email_input.setText(user.email)
         edit_profile_bio_input.setText(user.bio)
+    }
+
+    private fun onPasswordConfirm(password: String) {
+        if (password.isNotEmpty()) {
+            val credential = EmailAuthProvider.getCredential(viewModel.user.value!!.email, password)
+            Log.d(TAG, "email: ${viewModel.user.value!!.email}")
+            firebase.reauthenticate(credential, context) {
+                firebase.updateEmail(newUser.email, context) {
+                    updateUser2()
+                }
+            }
+        } else {
+            showToast(context, "Enter your password")
+        }
     }
 }

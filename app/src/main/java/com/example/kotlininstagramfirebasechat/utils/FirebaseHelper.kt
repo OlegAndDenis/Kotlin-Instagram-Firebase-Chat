@@ -1,6 +1,8 @@
 package com.example.kotlininstagramfirebasechat.utils
 
 import android.content.Context
+import android.util.Log
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -17,6 +19,28 @@ class FirebaseHelper {
             .addOnFailureListener {
                 showToast(context, it.message)
             }
+    }
+
+    fun updateEmail(email: String, context: Context?, onSuccess: () -> Unit) {
+        auth.currentUser!!.updateEmail(email).addOnCompleteListener {
+            if (it.isSuccessful) {
+                onSuccess()
+            } else {
+                showToast(context, it.exception!!.message!!)
+            }
+        }
+    }
+
+    fun reauthenticate(credential: AuthCredential, context: Context?, onSuccess: () -> Unit) {
+        auth.currentUser!!.reauthenticate(credential).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Log.d("Edit", "success")
+                onSuccess()
+            } else {
+                showToast(context, it.exception!!.message!!)
+                Log.d("Edit", it.exception!!.message!!)
+            }
+        }
     }
 
     fun currentUserReference(): DatabaseReference = database.child("users").child(auth.currentUser!!.uid)

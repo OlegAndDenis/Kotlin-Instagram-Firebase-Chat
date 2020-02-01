@@ -10,7 +10,7 @@
         android:id="@+id/myProfileFragment"
         android:name="com.example.kotlininstagramfirebasechat.screens.profile.myProfile.MyProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_my_profile" >
+        tools:layout="@layout/fragment_my_profile">
         <action
             android:id="@+id/action_myProfile_to_editProfile"
             app:destination="@id/editProfileFragment" />
@@ -19,5 +19,14 @@
         android:id="@+id/editProfileFragment"
         android:name="com.example.kotlininstagramfirebasechat.screens.profile.editProfile.EditProfileFragment"
         android:label="Edit Profile"
-        tools:layout="@layout/fragment_edit_profile" />
+        tools:layout="@layout/fragment_edit_profile" >
+        <action
+            android:id="@+id/action_editProfile_to_emailChangeDialog"
+            app:destination="@id/emailChangeDialog" />
+    </fragment>
+    <dialog
+        android:id="@+id/emailChangeDialog"
+        android:name="com.example.kotlininstagramfirebasechat.screens.profile.editProfile.EmailChangeDialog"
+        android:label="EmailChangeDialog"
+        tools:layout="@layout/dialog_change_email" />
 </navigation>
