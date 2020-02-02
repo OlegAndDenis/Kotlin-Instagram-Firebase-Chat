@@ -68,11 +68,6 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         latestMessagesMap.values.forEach {
             adapter.add(ChatsAdapter(it))
         }
-        try {
-            progress_bar.hideView()
-        } catch (e: Exception) {
-            Log.d(TAG, e.message ?: return)
-        }
     }
 
     private fun listenForLatestMessages() {
@@ -89,6 +84,11 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 Log.d(TAG, "has children: " + dataSnapshot.hasChildren())
+                try {
+                    progress_bar.hideView()
+                } catch (e: Exception) {
+                    Log.d(TAG, e.message ?: return)
+                }
             }
 
         })

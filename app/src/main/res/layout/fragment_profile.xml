@@ -1,45 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    tools:context=".screens.profile.ProfileFragment">
+    android:layout_height="match_parent">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_photo"
-        android:layout_width="125dp"
-        android:layout_height="125dp"
-        android:layout_marginTop="50dp"
-        android:src="@drawable/portrait_placeholder"
-        app:civ_border_color="@color/colorAccent"
-        app:civ_border_width="2dp" />
-
-    <TextView
-        android:id="@+id/profile_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Denis"
-        android:textSize="18sp"
-        android:layout_marginTop="@dimen/standard_margin"
-        android:layout_marginStart="@dimen/standard_margin"
-        android:layout_marginEnd="@dimen/standard_margin"/>
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        tools:context=".screens.profile.ProfileFragment">
 
-    <TextView
-        android:id="@+id/profile_bio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/colorSecondaryText"
-        tools:text="Hi! I am Denis and it is beautiful"
-        android:layout_marginStart="@dimen/standard_margin"
-        android:layout_marginEnd="@dimen/standard_margin"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_photo"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/portrait_placeholder"
+            app:civ_border_color="@color/colorAccent"
+            app:civ_border_width="2dp" />
 
-    <Button
-        android:id="@+id/profile_chat_button"
-        style="@style/ButtonSizes"
-        android:text="@string/send_message" />
+        <TextView
+            android:id="@+id/profile_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:layout_marginTop="@dimen/standard_margin"
+            android:layout_marginEnd="@dimen/standard_margin"
+            android:textSize="18sp"
+            tools:text="Denis" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/profile_bio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:layout_marginEnd="@dimen/standard_margin"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="16sp"
+            tools:text="Hi! I am Denis and it is beautiful" />
+
+        <Button
+            android:id="@+id/profile_chat_button"
+            style="@style/ButtonSizes"
+            android:text="@string/send_message" />
+
+    </LinearLayout>
+</ScrollView>

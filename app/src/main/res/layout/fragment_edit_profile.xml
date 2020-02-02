@@ -7,9 +7,9 @@
     tools:context=".screens.profile.editProfile.EditProfileFragment">
 
     <ScrollView
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,9 +30,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:textColor="@color/colorAccent"
                 android:paddingTop="8dp"
-                android:text="@string/change_profile_photo" />
+                android:text="@string/change_profile_photo"
+                android:textColor="@color/colorAccent" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edit_profile_name_input_layout"
@@ -64,19 +64,19 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edit_profile_bio_input_layout"
-                app:helperText="@string/bio_helper_text"
                 style="@style/mainTextInputSizes"
-                android:background="#fafafa">
+                android:background="#fafafa"
+                app:helperText="@string/bio_helper_text">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_profile_bio_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLength="120"
-                    android:maxLines="3"
-                    android:maxHeight="120dp"
                     android:hint="@string/bio"
-                    android:importantForAutofill="no" />
+                    android:importantForAutofill="no"
+                    android:maxHeight="120dp"
+                    android:maxLength="120"
+                    android:maxLines="3" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
