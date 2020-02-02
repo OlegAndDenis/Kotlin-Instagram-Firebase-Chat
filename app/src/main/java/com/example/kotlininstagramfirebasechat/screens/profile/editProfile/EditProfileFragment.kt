@@ -1,6 +1,8 @@
 package com.example.kotlininstagramfirebasechat.screens.profile.editProfile
 
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -10,9 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.User
-import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
-import com.example.kotlininstagramfirebasechat.utils.showToast
-import com.example.kotlininstagramfirebasechat.utils.toStringOrNull
+import com.example.kotlininstagramfirebasechat.utils.*
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,6 +23,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
 
     private var newUser = User()
     private lateinit var firebase: FirebaseHelper
+    private lateinit var camera: CameraHelper
 
     companion object {
         val TAG = EditProfileFragment::class.java.simpleName
@@ -33,17 +34,17 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        firebase = FirebaseHelper()
-        firebase.currentUserReference().addListenerForSingleValueEvent(object:
-            ValueEventListener {
+        firebase = FirebaseHelper(context)
+        camera = CameraHelper(this)
+
+        firebase.currentUserReference().addValueEventListener(object:
+            ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "onCancelled: ", error.toException())
+            }
 
             override fun onDataChange(data: DataSnapshot) {
                 viewModel.updateUser(data.getValue(User::class.java) ?: return)
-                Log.d(TAG, "update")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "onCancelled: ", error.toException())
             }
 
         })
@@ -60,6 +61,21 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
             Log.d(TAG, "password: $it")
             onPasswordConfirm(it)
         })
+
+        edit_profile_image.setOnClickListener { camera.takeCameraPicture() }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d(TAG, "onActivityResult")
+        if (requestCode == REQUEST_GALLERY_PICTURE && resultCode == RESULT_OK) {
+            Log.d(TAG, "onActivityResult Result Ok")
+            firebase.uploadUserPhoto(data?.data ?: return) {
+                firebase.storageUid().addOnCompleteListener {
+                    val photoUrl = it.result.toString()
+                    firebase.updateUserPhoto(photoUrl) {}
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -89,7 +105,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
     private fun updateUser2() {
         val updatesMap = viewModel.updateUserData(newUser)
 
-        firebase.updateUser(updatesMap, context)
+        firebase.updateUser(updatesMap)
             showToast(context,"Profile saved")
 
     }
@@ -112,14 +128,15 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
         edit_profile_name_input.setText(user.name)
         edit_profile_email_input.setText(user.email)
         edit_profile_bio_input.setText(user.bio)
+        edit_profile_image.loadUserPhoto(user.photo)
     }
 
     private fun onPasswordConfirm(password: String) {
         if (password.isNotEmpty()) {
             val credential = EmailAuthProvider.getCredential(viewModel.user.value!!.email, password)
             Log.d(TAG, "email: ${viewModel.user.value!!.email}")
-            firebase.reauthenticate(credential, context) {
-                firebase.updateEmail(newUser.email, context) {
+            firebase.reauthenticate(credential) {
+                firebase.updateEmail(newUser.email) {
                     updateUser2()
                 }
             }

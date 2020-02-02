@@ -15,10 +15,7 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.User
-import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
-import com.example.kotlininstagramfirebasechat.utils.hideKeyboard
-import com.example.kotlininstagramfirebasechat.utils.hideView
-import com.example.kotlininstagramfirebasechat.utils.showView
+import com.example.kotlininstagramfirebasechat.utils.*
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -40,7 +37,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate")
-        firebase = FirebaseHelper()
+        firebase = FirebaseHelper(context)
         setHasOptionsMenu(true)
     }
 
@@ -126,7 +123,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 class UserItem(val user: User) : Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.username_textview_new_message.text = user.name
+        viewHolder.itemView.run{
+            username_textview_new_message.text = user.name
+            imageview_new_message.loadUserPhoto(user.photo)
+        }
     }
 
     override fun getLayout() = R.layout.item_new_user

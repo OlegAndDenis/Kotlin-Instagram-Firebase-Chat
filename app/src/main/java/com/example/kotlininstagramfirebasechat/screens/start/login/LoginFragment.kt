@@ -19,7 +19,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         coordinateBtnAndInputs(login_sign_in_button, login_email_input, login_password_input)
 
-        firebase = FirebaseHelper()
+        firebase = FirebaseHelper(context)
 
         login_sign_in_button.setOnClickListener { signIn() }
         login_register_text.setOnClickListener { navigateToRegister() }

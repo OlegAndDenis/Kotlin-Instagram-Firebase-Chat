@@ -45,7 +45,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
         KeyboardVisibilityEvent.setEventListener(activity as MainActivity, this)
         coordinateImgBtnAndInputs(chat_send_button, chat_message_input)
 
-        firebase = FirebaseHelper()
+        firebase = FirebaseHelper(context)
         firebase.currentUserReference().addListenerForSingleValueEvent(object : ValueEventListener {
 
             override fun onDataChange(data: DataSnapshot) {
@@ -118,7 +118,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
                             adapter.add(ChatToItemLight(it.text))
                         } else {
                             sameUser = it.fromId
-                            adapter.add(ChatToItem(it.text, it.timestamp))
+                            adapter.add(ChatToItem(it.text, companionUser.photo, it.timestamp))
                         }
                     }
                 }
@@ -194,13 +194,14 @@ class ChatFromItem(val text: String, private val timestamp: Long) :
 
 }
 
-class ChatToItem(val text: String, private val timestamp: Long) :
+class ChatToItem(val text: String, private val userPhoto: String?, private val timestamp: Long) :
     Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.run {
             textview_to_row.text = text
             to_msg_time.text = getFormattedTimeChatLog(timestamp)
+            imageview_chat_to_row.loadUserPhoto(userPhoto)
         }
     }
 

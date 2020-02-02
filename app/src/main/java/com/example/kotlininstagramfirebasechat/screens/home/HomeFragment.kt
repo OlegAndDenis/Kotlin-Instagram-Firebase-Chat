@@ -22,7 +22,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        firebase = FirebaseHelper()
+        firebase = FirebaseHelper(context)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -23,7 +23,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        firebase = FirebaseHelper()
+        firebase = FirebaseHelper(context)
         user = User()
     }
 

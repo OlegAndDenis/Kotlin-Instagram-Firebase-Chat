@@ -9,10 +9,8 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.*
+import com.example.kotlininstagramfirebasechat.R
 
 fun hideKeyboard(activity: Activity) {
     val inputMethodManager =
@@ -95,4 +93,15 @@ fun coordinateImgBtnAndInputs(btn: ImageButton, vararg inputs: EditText) {
 fun Editable.toStringOrNull(): String? {
     val str = toString()
     return if (str.isEmpty()) null else str
+}
+
+fun ImageView.loadUserPhoto(photoUrl: String?) =
+    ifNotDestroyed {
+        GlideApp.with(this).load(photoUrl).fallback(R.drawable.portrait_placeholder).into(this)
+    }
+
+private fun View.ifNotDestroyed(block: () -> Unit) {
+    if (!(context as Activity).isDestroyed) {
+        block()
+    }
 }

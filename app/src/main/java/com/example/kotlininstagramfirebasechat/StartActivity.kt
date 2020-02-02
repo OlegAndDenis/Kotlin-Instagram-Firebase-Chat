@@ -18,7 +18,7 @@ class StartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
         Log.d(TAG, "created")
-        FirebaseHelper().auth.addAuthStateListener {
+        FirebaseHelper(this).auth.addAuthStateListener {
             if (it.currentUser != null) {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()

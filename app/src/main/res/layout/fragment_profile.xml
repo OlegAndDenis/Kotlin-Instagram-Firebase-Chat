@@ -9,7 +9,8 @@
     tools:context=".screens.profile.ProfileFragment">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="wrap_content"
+        android:id="@+id/profile_photo"
+        android:layout_width="125dp"
         android:layout_height="125dp"
         android:layout_marginTop="50dp"
         android:src="@drawable/portrait_placeholder"

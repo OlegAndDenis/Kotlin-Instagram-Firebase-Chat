@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.User
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
+import com.example.kotlininstagramfirebasechat.utils.loadUserPhoto
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -27,7 +28,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        firebase = FirebaseHelper()
+        firebase = FirebaseHelper(context)
 
         arguments?.let {
             uid = ProfileFragmentArgs.fromBundle(it).UserUid
@@ -36,8 +37,14 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
                 override fun onDataChange(data: DataSnapshot) {
                     val user = data.getValue(User::class.java)
-                    profile_name.text = user?.name
-                    profile_bio.text = user?.bio
+                    try {
+                        profile_name.text = user?.name
+                        profile_bio.text = user?.bio
+                        profile_photo.loadUserPhoto(user?.photo)
+                    } catch (e: Exception) {
+                        Log.d(TAG, e.message ?: return)
+                    }
+
                 }
 
                 override fun onCancelled(error: DatabaseError) {

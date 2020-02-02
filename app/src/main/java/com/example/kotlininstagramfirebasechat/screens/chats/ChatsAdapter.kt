@@ -6,6 +6,7 @@ import com.example.kotlininstagramfirebasechat.models.ChatMessage
 import com.example.kotlininstagramfirebasechat.models.User
 import com.example.kotlininstagramfirebasechat.utils.DateUtils
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
+import com.example.kotlininstagramfirebasechat.utils.loadUserPhoto
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -35,6 +36,7 @@ class ChatsAdapter(val chatMessage: ChatMessage) : Item<ViewHolder>() {
                 viewHolder.itemView.run {
                     username_textview_latest_message.text = chatPartnerUser?.name
                     latest_msg_time.text = DateUtils.getFormattedTime(chatMessage.timestamp)
+                    imageview_latest_message.loadUserPhoto(chatPartnerUser?.photo)
                 }
             }
 

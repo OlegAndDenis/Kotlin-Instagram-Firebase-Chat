@@ -46,7 +46,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated")
-        firebase = FirebaseHelper()
+        firebase = FirebaseHelper(context)
 
         recyclerview_latest_messages.adapter = adapter
 

@@ -1,5 +1,6 @@
 package com.example.kotlininstagramfirebasechat
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         Log.d(TAG, "create")
-        FirebaseHelper().auth.addAuthStateListener {
+        FirebaseHelper(this).auth.addAuthStateListener {
             if (it.currentUser == null) {
                 finish()
                 startActivity(Intent(this, StartActivity::class.java))

@@ -6,5 +6,6 @@ class User(
     @Exclude val uid: String = "",
     val name: String = "",
     val email: String = "",
-    val bio: String? = null
+    val bio: String? = null,
+    val photo: String? = null
 )
