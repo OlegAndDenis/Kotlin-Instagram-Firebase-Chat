@@ -3,11 +3,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="login">login</string>
-    <string name="password">password</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
     <string name="loginfragment">LoginFragment</string>
     <string name="register_text">Don\'t have an account? sing up!</string>
-    <string name="name">name</string>
+    <string name="name">Name</string>
     <string name="sign_up">sign up</string>
     <string name="chats">chats</string>
     <string name="login_empty_fields">Please fill all the fields</string>
@@ -28,9 +28,12 @@
     <string name="type_a_message">Type a message</string>
     <string name="send_message">send message</string>
     <string name="change_profile_photo">Change Profile Photo</string>
-    <string name="email">e-mail</string>
-    <string name="bio">bio</string>
+    <string name="email">E-mail</string>
+    <string name="bio">Bio</string>
     <string name="save">Save</string>
     <string name="please_enter_password">Please enter your password</string>
     <string name="bio_helper_text">This information will be displayed in your profile</string>
+    <string name="share">Share</string>
+    <string name="share_caption">Caption</string>
+    <string name="share_photo_description">Share photo</string>
 </resources>

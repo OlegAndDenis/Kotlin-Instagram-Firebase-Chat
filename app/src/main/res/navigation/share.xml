@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/share"
+    app:startDestination="@id/shareFragment">
+
+    <fragment
+        android:id="@+id/shareFragment"
+        android:name="com.example.kotlininstagramfirebasechat.screens.share.ShareFragment"
+        android:label="@string/share"
+        tools:layout="@layout/fragment_share" />
+</navigation>

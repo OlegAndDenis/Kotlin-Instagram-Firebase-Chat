@@ -140,6 +140,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
                     updateUser2()
                 }
             }
+            viewModel.setPassword("")
         } else {
             showToast(context, "Enter your password")
         }

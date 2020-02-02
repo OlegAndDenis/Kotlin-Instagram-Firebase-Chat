@@ -14,33 +14,35 @@ import com.google.firebase.storage.UploadTask
 class FirebaseHelper(val context: Context? = null) {
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
     val database: DatabaseReference = FirebaseDatabase.getInstance().reference
-    private val storage: StorageReference = FirebaseStorage.getInstance().reference
+    val storage: StorageReference = FirebaseStorage.getInstance().reference
 
 
     fun uploadUserPhoto(
         photo: Uri,
         onSuccess: (UploadTask.TaskSnapshot) -> Unit
     ) {
-        storage.child("users/${auth.currentUser!!.uid}/photo").putFile(photo).addOnCompleteListener {
-            if (it.isSuccessful) {
-                onSuccess(it.result!!)
-            } else {
-                showToast(context, it.exception!!.message!!)
+        storage.child("users/${auth.currentUser!!.uid}/photo").putFile(photo)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    onSuccess(it.result!!)
+                } else {
+                    showToast(context, it.exception!!.message!!)
+                }
             }
-        }
     }
 
     fun updateUserPhoto(
         photoUrl: String,
         onSuccess: () -> Unit
     ) {
-        database.child("users/${auth.currentUser!!.uid}/photo").setValue(photoUrl).addOnCompleteListener {
-            if (it.isSuccessful) {
-                onSuccess()
-            } else {
-                showToast(context, it.exception!!.message!!)
+        database.child("users/${auth.currentUser!!.uid}/photo").setValue(photoUrl)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    onSuccess()
+                } else {
+                    showToast(context, it.exception!!.message!!)
+                }
             }
-        }
     }
 
     fun updateUser(
@@ -75,8 +77,18 @@ class FirebaseHelper(val context: Context? = null) {
     }
 
     fun storageUid() = storage.child("users/${auth.currentUser!!.uid}/photo").downloadUrl
-    fun currentUserReference(): DatabaseReference = database.child("users").child(auth.currentUser!!.uid)
+
+    fun currentUserReference(): DatabaseReference =
+        database.child("users").child(auth.currentUser!!.uid)
+
     fun userReference(uid: String): DatabaseReference = database.child("users/$uid")
-    fun messages(fromId: String, toId: String): DatabaseReference = database.child("/user-messages/$fromId/$toId")
-    fun latestMessages(fromId: String, toId: String): DatabaseReference = database.child("/latest-messages/$fromId/$toId")
+
+    fun messages(fromId: String, toId: String): DatabaseReference =
+        database.child("/user-messages/$fromId/$toId")
+
+    fun latestMessages(fromId: String, toId: String): DatabaseReference =
+        database.child("/latest-messages/$fromId/$toId")
+
+    fun storageShare(uri: Uri) =
+        storage.child("users/${auth.currentUser!!.uid}/images/${uri.lastPathSegment}").downloadUrl
 }
