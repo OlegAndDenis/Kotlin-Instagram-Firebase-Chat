@@ -37,13 +37,47 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             uid = ProfileFragmentArgs.fromBundle(it).UserUid
 
             getUserData()
+            isFollow()
             getUserImage()
 
             profile_chat_button.setOnClickListener {
                 findNavController().navigate(ProfileFragmentDirections.actionProfileToChat(uid))
             }
+
+            profile_follow_button.setOnClickListener {
+                follow()
+            }
         }
 
+    }
+
+    private fun follow() {
+        if (profile_follow_button.text == "follow") {
+            val ref = firebase.database.child("subscriptions/${firebase.auth.currentUser!!.uid}/$uid")
+            ref.setValue("true")
+        } else {
+            val ref = firebase.database.child("subscriptions/${firebase.auth.currentUser!!.uid}/$uid")
+            ref.setValue(null)
+        }
+    }
+
+    private fun isFollow() {
+        firebase.database.child("subscriptions/${firebase.auth.currentUser!!.uid}/$uid").addValueEventListener(object: ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(data: DataSnapshot) {
+                val follow = data.getValue(String::class.java)
+                if (follow != null) {
+                    Log.d(TAG, "not null")
+                    profile_follow_button.text = getString(R.string.unfollow)
+                } else {
+                    Log.d(TAG, "null")
+                    profile_follow_button.text = getString(R.string.follow)
+                }
+            }
+
+        })
     }
 
     private fun getUserData() {

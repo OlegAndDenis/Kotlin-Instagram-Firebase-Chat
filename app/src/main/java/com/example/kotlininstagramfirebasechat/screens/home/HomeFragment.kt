@@ -25,11 +25,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         firebase = FirebaseHelper(context)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        test_sign_out.setOnClickListener { firebase.auth.signOut() }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.chats, menu)
