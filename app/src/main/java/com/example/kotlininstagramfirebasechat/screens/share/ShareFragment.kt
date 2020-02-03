@@ -10,6 +10,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 
 import com.example.kotlininstagramfirebasechat.R
+import com.example.kotlininstagramfirebasechat.models.FeedPost
 import com.example.kotlininstagramfirebasechat.utils.*
 import com.google.firebase.database.ServerValue
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -100,18 +101,5 @@ class ShareFragment : Fragment(R.layout.fragment_share) {
         )
     }
 
-    data class FeedPost(
-        val uid: String = "",
-        val image: String = "",
-        val likesCount: Int = 0,
-        val commentsCount: Int = 0,
-        val caption: String = "",
-        val comments: List<Comment> = emptyList(),
-        val timestamp: Any = ServerValue.TIMESTAMP
-    ) {
-        fun timestampDate(): Date = Date(timestamp as Long)
-    }
-
-    data class Comment(val uid: String, val username: String, val text: String)
 
 }

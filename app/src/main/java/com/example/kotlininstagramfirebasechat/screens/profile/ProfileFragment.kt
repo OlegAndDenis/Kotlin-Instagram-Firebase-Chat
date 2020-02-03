@@ -44,7 +44,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     } catch (e: Exception) {
                         Log.d(TAG, e.message ?: return)
                     }
-
                 }
 
                 override fun onCancelled(error: DatabaseError) {

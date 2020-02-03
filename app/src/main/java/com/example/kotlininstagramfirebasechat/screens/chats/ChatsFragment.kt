@@ -67,6 +67,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         adapter.clear()
         latestMessagesMap.values.forEach {
             adapter.add(ChatsAdapter(it))
+            Log.d(TAG, "${it.text} adapter")
         }
     }
 
@@ -113,6 +114,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                 Log.d(TAG, "latestMesssage call")
                 dataSnapshot.getValue(ChatMessage::class.java)?.let {
                     latestMessagesMap[dataSnapshot.key!!] = it
+                    Log.d(TAG, it.text)
                     refreshRecyclerViewMessages()
                 }
             }

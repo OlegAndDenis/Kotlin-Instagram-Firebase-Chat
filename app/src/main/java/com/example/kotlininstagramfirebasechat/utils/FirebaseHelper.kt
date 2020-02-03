@@ -89,6 +89,8 @@ class FirebaseHelper(val context: Context? = null) {
     fun latestMessages(fromId: String, toId: String): DatabaseReference =
         database.child("/latest-messages/$fromId/$toId")
 
+    fun images(uid: String = auth.currentUser!!.uid) = database.child("/feed-posts/$uid")
+
     fun storageShare(uri: Uri) =
         storage.child("users/${auth.currentUser!!.uid}/images/${uri.lastPathSegment}").downloadUrl
 }

@@ -1,18 +1,29 @@
 package com.example.kotlininstagramfirebasechat.screens.profile.myProfile
 
 
+import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.kotlininstagramfirebasechat.R
+import com.example.kotlininstagramfirebasechat.models.FeedPost
 import com.example.kotlininstagramfirebasechat.models.User
+import com.example.kotlininstagramfirebasechat.screens.profile.ProfileAdapter
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
+import com.example.kotlininstagramfirebasechat.utils.ValueEventListenerAdapter
 import com.example.kotlininstagramfirebasechat.utils.loadUserPhoto
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.OnItemClickListener
+import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_my_profile.*
 
 class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
@@ -22,6 +33,7 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
     }
 
     private lateinit var firebase: FirebaseHelper
+    private val adapter = GroupAdapter<ViewHolder>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +43,33 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        firebase.currentUserReference().addListenerForSingleValueEvent(object: ValueEventListener {
+
+        my_profile_recycler.adapter = adapter
+
+        getUserData()
+        getUserImage()
+
+        my_profile_to_edit_profile_button.setOnClickListener {
+            findNavController().navigate(MyProfileFragmentDirections.actionMyProfileToEditProfile())
+        }
+    }
+
+    private fun getUserImage() {
+        val ref = firebase.images()
+        ref.addValueEventListener(ValueEventListenerAdapter {
+            val images =
+                it.children.map { data ->
+                    data.getValue(FeedPost::class.java)!!
+                }.map { feedPost ->
+                    feedPost.image
+                }
+            my_profile_recycler.adapter = ProfileAdapter(images)
+        })
+
+    }
+
+    private fun getUserData() {
+        firebase.currentUserReference().addListenerForSingleValueEvent(object : ValueEventListener {
 
             override fun onDataChange(data: DataSnapshot) {
                 val user = data.getValue(User::class.java)
@@ -45,10 +83,6 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
             }
 
         })
-
-        my_profile_to_edit_profile_button.setOnClickListener {
-            findNavController().navigate(MyProfileFragmentDirections.actionMyProfileToEditProfile())
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -61,6 +95,12 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
         return true
     }
 
+}
+
+class SquareImageView(context: Context, attrs: AttributeSet) : ImageView(context, attrs) {
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, widthMeasureSpec)
+    }
 }
 
 

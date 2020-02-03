@@ -100,6 +100,11 @@ fun ImageView.loadUserPhoto(photoUrl: String?) =
         GlideApp.with(this).load(photoUrl).fallback(R.drawable.portrait_placeholder).into(this)
     }
 
+fun ImageView.loadImage(image: String?) =
+    ifNotDestroyed {
+        GlideApp.with(this).load(image).centerCrop().into(this)
+    }
+
 private fun View.ifNotDestroyed(block: () -> Unit) {
     if (!(context as Activity).isDestroyed) {
         block()
