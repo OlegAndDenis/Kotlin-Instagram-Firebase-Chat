@@ -33,7 +33,6 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
     }
 
     private lateinit var firebase: FirebaseHelper
-    private val adapter = GroupAdapter<ViewHolder>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +42,6 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        my_profile_recycler.adapter = adapter
 
         getUserData()
         getUserImage()
@@ -95,12 +92,6 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
         return true
     }
 
-}
-
-class SquareImageView(context: Context, attrs: AttributeSet) : ImageView(context, attrs) {
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, widthMeasureSpec)
-    }
 }
 
 

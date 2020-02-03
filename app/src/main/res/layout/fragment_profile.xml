@@ -46,5 +46,14 @@
             style="@style/ButtonSizes"
             android:text="@string/send_message" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/my_profile_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3" />
+
     </LinearLayout>
 </ScrollView>

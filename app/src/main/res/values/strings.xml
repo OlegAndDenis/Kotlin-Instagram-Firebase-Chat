@@ -36,4 +36,5 @@
     <string name="share">Share</string>
     <string name="share_caption">Caption</string>
     <string name="share_photo_description">Share photo</string>
+    <string name="post_image">Post image</string>
 </resources>
