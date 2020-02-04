@@ -1,29 +1,16 @@
 package com.example.kotlininstagramfirebasechat.screens.profile.myProfile
 
 
-import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
-import android.util.Log
 import android.view.*
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.kotlininstagramfirebasechat.R
-import com.example.kotlininstagramfirebasechat.models.FeedPost
 import com.example.kotlininstagramfirebasechat.models.User
 import com.example.kotlininstagramfirebasechat.screens.profile.ProfileAdapter
-import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
-import com.example.kotlininstagramfirebasechat.utils.ValueEventListenerAdapter
-import com.example.kotlininstagramfirebasechat.utils.loadUserPhoto
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.OnItemClickListener
-import com.xwray.groupie.ViewHolder
+import com.example.kotlininstagramfirebasechat.utils.*
 import kotlinx.android.synthetic.main.fragment_my_profile.*
 
 class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
@@ -33,52 +20,50 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
     }
 
     private lateinit var firebase: FirebaseHelper
+    private val viewModel: MyProfileViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
         firebase = FirebaseHelper(context)
+
+        getUserData()
+        getUserImage()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getUserData()
-        getUserImage()
+        viewModel.user.observe(viewLifecycleOwner, Observer { updateView(it) })
+
+        viewModel.images.observe(viewLifecycleOwner, Observer { updateImages(it) })
 
         my_profile_to_edit_profile_button.setOnClickListener {
             findNavController().navigate(MyProfileFragmentDirections.actionMyProfileToEditProfile())
         }
     }
 
-    private fun getUserImage() {
-        val ref = firebase.images()
-        ref.addValueEventListener(ValueEventListenerAdapter {
-            val images =
-                it.children.map { data ->
-                    data.getValue(FeedPost::class.java)!!
-                }.map { feedPost ->
-                    feedPost.image
-                }
-            my_profile_recycler.adapter = ProfileAdapter(images)
-        })
+    private fun updateImages(images: List<String>) {
+        my_profile_recycler.adapter = ProfileAdapter(images)
+    }
 
+    private fun updateView(user: User) {
+        my_profile_name.text = user.name
+        my_profile_bio.text = user.bio
+        my_profile_photo.loadUserPhoto(user.photo)
     }
 
     private fun getUserData() {
-        firebase.currentUserReference().addListenerForSingleValueEvent(object : ValueEventListener {
+        firebase.userReference().addValueEventListener(ValueEventListenerAdapter { data ->
+            viewModel.updateUser(data.asUser())
+        })
+    }
 
-            override fun onDataChange(data: DataSnapshot) {
-                val user = data.getValue(User::class.java)
-                my_profile_name.text = user?.name ?: ""
-                my_profile_bio.text = user?.bio ?: ""
-                my_profile_photo.loadUserPhoto(user?.photo)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "onCancelled: ", error.toException())
-            }
-
+    private fun getUserImage() {
+        val ref = firebase.images()
+        ref.addValueEventListener(ValueEventListenerAdapter { data ->
+            viewModel.updateImages(data.children.map { it.asFeedPost()!!.image })
         })
     }
 

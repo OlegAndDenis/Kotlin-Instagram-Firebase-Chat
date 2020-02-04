@@ -44,7 +44,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
 
             <Button
                 android:id="@+id/profile_chat_button"
@@ -53,7 +54,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="10dp"
-                android:text="@string/send_message" />
+                android:text="@string/message" />
 
             <Button
                 android:id="@+id/profile_follow_button"
@@ -65,8 +66,6 @@
                 android:text="@string/follow" />
 
         </LinearLayout>
-
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/my_profile_recycler"

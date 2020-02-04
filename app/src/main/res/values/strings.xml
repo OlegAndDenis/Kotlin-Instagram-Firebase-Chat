@@ -26,7 +26,7 @@
     <string name="sign_out">sign out</string>
     <string name="search">Search</string>
     <string name="type_a_message">Type a message</string>
-    <string name="send_message">send message</string>
+    <string name="message">message</string>
     <string name="change_profile_photo">Change Profile Photo</string>
     <string name="email">E-mail</string>
     <string name="bio">Bio</string>

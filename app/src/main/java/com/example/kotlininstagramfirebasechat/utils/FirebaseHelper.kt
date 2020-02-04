@@ -78,13 +78,14 @@ class FirebaseHelper(val context: Context? = null) {
 
     fun storageUid() = storage.child("users/${auth.currentUser!!.uid}/photo").downloadUrl
 
-    fun currentUserReference(): DatabaseReference =
-        database.child("users").child(auth.currentUser!!.uid)
-
-    fun userReference(uid: String): DatabaseReference = database.child("users/$uid")
+    fun userReference(uid: String = auth.currentUser!!.uid): DatabaseReference = database.child("users/$uid")
 
     fun messages(fromId: String, toId: String): DatabaseReference =
         database.child("/user-messages/$fromId/$toId")
+
+    fun isFollow(uid: String) = database.child("subscriptions/${auth.currentUser!!.uid}/$uid")
+
+    fun subscription(uid: String) = database.child("subscriptions/${auth.currentUser!!.uid}/$uid")
 
     fun latestMessages(fromId: String, toId: String): DatabaseReference =
         database.child("/latest-messages/$fromId/$toId")

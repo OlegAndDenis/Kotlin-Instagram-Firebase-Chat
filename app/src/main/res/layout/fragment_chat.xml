@@ -54,7 +54,7 @@
                 android:layout_height="45dp"
                 android:layout_gravity="bottom"
                 android:background="?selectableItemBackgroundBorderless"
-                android:contentDescription="@string/send_message"
+                android:contentDescription="@string/message"
                 android:src="@drawable/ic_send"
                 android:stateListAnimator="@animator/button_animator" />
         </LinearLayout>

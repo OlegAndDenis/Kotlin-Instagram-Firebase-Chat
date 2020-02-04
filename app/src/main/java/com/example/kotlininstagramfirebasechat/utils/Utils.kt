@@ -11,6 +11,10 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import com.example.kotlininstagramfirebasechat.R
+import com.example.kotlininstagramfirebasechat.models.ChatMessage
+import com.example.kotlininstagramfirebasechat.models.FeedPost
+import com.example.kotlininstagramfirebasechat.models.User
+import com.google.firebase.database.DataSnapshot
 
 fun hideKeyboard(activity: Activity) {
     val inputMethodManager =
@@ -110,3 +114,7 @@ private fun View.ifNotDestroyed(block: () -> Unit) {
         block()
     }
 }
+
+fun DataSnapshot.asUser(): User? = getValue(User::class.java)
+fun DataSnapshot.asFeedPost(): FeedPost? = getValue(FeedPost::class.java)
+fun DataSnapshot.asChatMessage(): ChatMessage? = getValue(ChatMessage::class.java)

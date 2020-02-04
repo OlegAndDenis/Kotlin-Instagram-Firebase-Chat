@@ -37,7 +37,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
         firebase = FirebaseHelper(context)
         camera = CameraHelper(this)
 
-        firebase.currentUserReference().addValueEventListener(object:
+        firebase.userReference().addValueEventListener(object:
             ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
                 Log.e(TAG, "onCancelled: ", error.toException())

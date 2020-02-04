@@ -32,10 +32,10 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
     }
 
     private var companionUser = User()
-    private var currentUser = User()
+    private lateinit var currentUid: String
     private lateinit var firebase: FirebaseHelper
 
-    val adapter = GroupAdapter<ViewHolder>()
+    private val adapter = GroupAdapter<ViewHolder>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,31 +46,14 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
         coordinateImgBtnAndInputs(chat_send_button, chat_message_input)
 
         firebase = FirebaseHelper(context)
-        firebase.currentUserReference().addListenerForSingleValueEvent(object : ValueEventListener {
 
-            override fun onDataChange(data: DataSnapshot) {
-                currentUser = data.getValue(User::class.java) ?: User()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "onCancelled: ", error.toException())
-            }
-
-        })
+        currentUid = firebase.auth.currentUser!!.uid
 
         arguments?.let {
             val uid = ChatFragmentArgs.fromBundle(it).companionUserUid
-            firebase.userReference(uid).addListenerForSingleValueEvent(object : ValueEventListener {
-
-                override fun onDataChange(data: DataSnapshot) {
-                    companionUser = data.getValue(User::class.java) ?: User()
-                    listenForMessages()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.e(TAG, "onCancelled: ", error.toException())
-                }
-
+            firebase.userReference(uid).addValueEventListener(ValueEventListenerAdapter { data ->
+                companionUser = data.getValue(User::class.java) ?: User()
+                listenForMessages()
             })
         }
 
@@ -80,53 +63,27 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
     }
 
     private fun listenForMessages() {
-        var sameUser = User().uid
-        val fromId = currentUser.uid
-        val toId = companionUser.uid
-        val ref = firebase.messages(fromId, toId)
+        var sameUser = ""
 
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.d(TAG, "database error: " + databaseError.message)
-            }
-
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                Log.d(TAG, "has children: " + dataSnapshot.hasChildren())
-            }
-        })
-
-        ref.addChildEventListener(object : ChildEventListener {
-            override fun onCancelled(databaseError: DatabaseError) {}
-
-            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {}
-
-            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {}
-
-            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-
-                dataSnapshot.getValue(ChatMessage::class.java)?.let {
-
-                    if (it.fromId == currentUser.uid) {
-                        if (it.fromId == sameUser) {
-                            adapter.add(ChatFromItemLight(it.text))
-                        } else {
-                            sameUser = it.fromId
-                            adapter.add(ChatFromItem(it.text, it.timestamp))
-                        }
+        firebase.messages(currentUid, companionUser.uid).addChildEventListener(ChildEventListenerAdapter { data ->
+            data.getValue(ChatMessage::class.java)?.let {
+                if (it.fromId == currentUid) {
+                    if (it.fromId == sameUser) {
+                        adapter.add(ChatFromItemLight(it.text))
                     } else {
-                        if (it.fromId == sameUser) {
-                            adapter.add(ChatToItemLight(it.text))
-                        } else {
-                            sameUser = it.fromId
-                            adapter.add(ChatToItem(it.text, companionUser.photo, it.timestamp))
-                        }
+                        sameUser = it.fromId
+                        adapter.add(ChatFromItem(it.text, it.timestamp))
+                    }
+                } else {
+                    if (it.fromId == sameUser) {
+                        adapter.add(ChatToItemLight(it.text))
+                    } else {
+                        sameUser = it.fromId
+                        adapter.add(ChatToItem(it.text, companionUser.photo, it.timestamp))
                     }
                 }
-
-                scrollChatDown()
             }
-
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
+            scrollChatDown()
         })
 
         progress_bar.hideView()
@@ -134,16 +91,14 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
 
     private fun performSendMessage() {
         val text = chat_message_input.text.toString()
+
         if (text.isEmpty()) return
 
-        val fromId = currentUser.uid
-        val toId = companionUser.uid
-
-        val reference = firebase.messages(fromId, toId).push()
-        val toReference = firebase.messages(toId, fromId).push()
+        val reference = firebase.messages(currentUid, companionUser.uid).push()
+        val toReference = firebase.messages(companionUser.uid, currentUid).push()
 
         val chatMessage =
-            ChatMessage(reference.key!!, text, fromId, toId, System.currentTimeMillis() / 1000)
+            ChatMessage(reference.key!!, text, currentUid, companionUser.uid, System.currentTimeMillis() / 1000)
         reference.setValue(chatMessage)
             .addOnSuccessListener {
                 Log.d(TAG, "Saved our chat message: ${reference.key}")
@@ -153,8 +108,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
 
         toReference.setValue(chatMessage)
 
-        firebase.latestMessages(fromId, toId).setValue(chatMessage)
-        firebase.latestMessages(toId, fromId).setValue(chatMessage)
+        firebase.latestMessages(currentUid, companionUser.uid).setValue(chatMessage)
+        firebase.latestMessages(companionUser.uid, currentUid).setValue(chatMessage)
     }
 
     override fun onDestroy() {
@@ -162,9 +117,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
         hideKeyboard(activity as MainActivity)
     }
 
-    override fun onVisibilityChanged(isOpen: Boolean) {
-        scrollChatDown()
-    }
+    override fun onVisibilityChanged(isOpen: Boolean) = scrollChatDown()
 
     private fun scrollChatDown() {
         try {
@@ -174,68 +127,4 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
         }
     }
 
-}
-
-class ChatFromItem(val text: String, private val timestamp: Long) :
-    Item<ViewHolder>() {
-
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-
-        viewHolder.itemView.run {
-            textview_from_row.text = text
-            from_msg_time.text = getFormattedTimeChatLog(timestamp)
-        }
-
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.item_chat_current_user
-    }
-
-}
-
-class ChatToItem(val text: String, private val userPhoto: String?, private val timestamp: Long) :
-    Item<ViewHolder>() {
-
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.run {
-            textview_to_row.text = text
-            to_msg_time.text = getFormattedTimeChatLog(timestamp)
-            imageview_chat_to_row.loadUserPhoto(userPhoto)
-        }
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.item_chat_companion_user
-    }
-
-}
-
-class ChatFromItemLight(val text: String) :
-    Item<ViewHolder>() {
-
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.run {
-            textview_from_row_light.text = text
-        }
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.item_chat_current_user_light
-    }
-
-}
-
-class ChatToItemLight(val text: String) :
-    Item<ViewHolder>() {
-
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.run {
-            textview_to_row_light.text = text
-        }
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.item_chat_companion_user_light
-    }
 }
