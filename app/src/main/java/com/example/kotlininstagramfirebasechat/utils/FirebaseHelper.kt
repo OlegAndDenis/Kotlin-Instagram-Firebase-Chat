@@ -11,11 +11,10 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 
-class FirebaseHelper(val context: Context? = null) {
+class FirebaseHelper(val context: Context?) {
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
     val database: DatabaseReference = FirebaseDatabase.getInstance().reference
     val storage: StorageReference = FirebaseStorage.getInstance().reference
-
 
     fun uploadUserPhoto(
         photo: Uri,

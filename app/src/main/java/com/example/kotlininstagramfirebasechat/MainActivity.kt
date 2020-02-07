@@ -13,6 +13,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
 import com.example.kotlininstagramfirebasechat.utils.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

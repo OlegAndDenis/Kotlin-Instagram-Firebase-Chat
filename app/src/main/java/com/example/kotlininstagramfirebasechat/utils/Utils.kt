@@ -4,15 +4,19 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
+import android.graphics.Typeface
+import android.text.*
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import com.example.kotlininstagramfirebasechat.R
-import com.example.kotlininstagramfirebasechat.models.ChatMessage
+import com.example.kotlininstagramfirebasechat.models.ChatRow
 import com.example.kotlininstagramfirebasechat.models.FeedPost
+import com.example.kotlininstagramfirebasechat.models.Message
 import com.example.kotlininstagramfirebasechat.models.User
 import com.google.firebase.database.DataSnapshot
 
@@ -117,4 +121,17 @@ private fun View.ifNotDestroyed(block: () -> Unit) {
 
 fun DataSnapshot.asUser(): User? = getValue(User::class.java)
 fun DataSnapshot.asFeedPost(): FeedPost? = getValue(FeedPost::class.java)
-fun DataSnapshot.asChatMessage(): ChatMessage? = getValue(ChatMessage::class.java)
+fun DataSnapshot.asMessage(): Message? = getValue(Message::class.java)
+
+private fun TextView.setCaptionText(username: String, caption: String) {
+    val usernameSpannable = SpannableString(username)
+    usernameSpannable.setSpan(
+        StyleSpan(Typeface.BOLD),
+        0,
+        usernameSpannable.length,
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+    )
+
+    text = SpannableStringBuilder().append(usernameSpannable).append(" ").append(caption)
+    movementMethod = LinkMovementMethod.getInstance()
+}

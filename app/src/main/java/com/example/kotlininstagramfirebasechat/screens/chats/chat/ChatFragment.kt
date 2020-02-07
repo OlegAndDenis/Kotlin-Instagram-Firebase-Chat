@@ -5,21 +5,16 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlininstagramfirebasechat.MainActivity
 import com.example.kotlininstagramfirebasechat.R
-import com.example.kotlininstagramfirebasechat.models.ChatMessage
+import com.example.kotlininstagramfirebasechat.models.ChatRow
+import com.example.kotlininstagramfirebasechat.models.Message
 import com.example.kotlininstagramfirebasechat.models.User
 import com.example.kotlininstagramfirebasechat.utils.*
-import com.example.kotlininstagramfirebasechat.utils.DateUtils.getFormattedTimeChatLog
-import com.google.firebase.database.*
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.item_chat_current_user.view.*
-import kotlinx.android.synthetic.main.item_chat_companion_user.view.*
 import kotlinx.android.synthetic.main.fragment_chat.*
-import kotlinx.android.synthetic.main.item_chat_companion_user_light.view.*
-import kotlinx.android.synthetic.main.item_chat_current_user_light.view.*
 import kotlinx.android.synthetic.main.progress_bar.*
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
@@ -29,6 +24,12 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
 
     companion object {
         val TAG = ChatFragment::class.java.simpleName
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+//        (activity as AppCompatActivity).supportActionBar?.title = "fff"
+//        (activity as AppCompatActivity).supportActionBar?.subtitle = "ddd"
     }
 
     private var companionUser = User()
@@ -66,19 +67,19 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
         var sameUser = ""
 
         firebase.messages(currentUid, companionUser.uid).addChildEventListener(ChildEventListenerAdapter { data ->
-            data.getValue(ChatMessage::class.java)?.let {
-                if (it.fromId == currentUid) {
-                    if (it.fromId == sameUser) {
+            data.asMessage()?.let {
+                if (it.uid == currentUid) {
+                    if (it.uid == sameUser) {
                         adapter.add(ChatFromItemLight(it.text))
                     } else {
-                        sameUser = it.fromId
+                        sameUser = it.uid
                         adapter.add(ChatFromItem(it.text, it.timestamp))
                     }
                 } else {
-                    if (it.fromId == sameUser) {
+                    if (it.uid == sameUser) {
                         adapter.add(ChatToItemLight(it.text))
                     } else {
-                        sameUser = it.fromId
+                        sameUser = it.uid
                         adapter.add(ChatToItem(it.text, companionUser.photo, it.timestamp))
                     }
                 }
@@ -97,19 +98,19 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
         val reference = firebase.messages(currentUid, companionUser.uid).push()
         val toReference = firebase.messages(companionUser.uid, currentUid).push()
 
-        val chatMessage =
-            ChatMessage(reference.key!!, text, currentUid, companionUser.uid, System.currentTimeMillis() / 1000)
-        reference.setValue(chatMessage)
+        val message = Message(currentUid, text, System.currentTimeMillis() / 1000)
+
+        toReference.setValue(message)
+        reference.setValue(message)
             .addOnSuccessListener {
                 Log.d(TAG, "Saved our chat message: ${reference.key}")
                 chat_message_input.text.clear()
                 scrollChatDown()
             }
 
-        toReference.setValue(chatMessage)
 
-        firebase.latestMessages(currentUid, companionUser.uid).setValue(chatMessage)
-        firebase.latestMessages(companionUser.uid, currentUid).setValue(chatMessage)
+        firebase.latestMessages(currentUid, companionUser.uid).setValue(message)
+        firebase.latestMessages(companionUser.uid, currentUid).setValue(message)
     }
 
     override fun onDestroy() {
