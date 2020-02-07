@@ -74,7 +74,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun follow() {
         if (viewModel.isFollow.value!!) {
-            firebase.subscription(uid).setValue(null)
+            firebase.subscription(uid).removeValue()
         } else {
             firebase.subscription(uid).setValue("true")
         }

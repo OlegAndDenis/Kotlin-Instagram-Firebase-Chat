@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.utils.*
+import com.google.firebase.database.DataSnapshot
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_chats.*
