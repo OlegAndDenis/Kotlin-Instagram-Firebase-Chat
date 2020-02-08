@@ -28,18 +28,15 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
 
         firebase = FirebaseHelper(context)
 
-        firebase.auth.addAuthStateListener {
-            if (it.currentUser != null) {
-                getUserData()
-                getUserImage()
-            }
-        }
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        getUserData()
+        getUserImage()
+        
         viewModel.user.observe(viewLifecycleOwner, Observer { updateView(it) })
 
         viewModel.images.observe(viewLifecycleOwner, Observer { updateImages(it) })
