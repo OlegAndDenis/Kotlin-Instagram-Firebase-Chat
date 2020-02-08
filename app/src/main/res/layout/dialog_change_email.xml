@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edit_profile_bio_input_layout"
         style="@style/mainTextInputSizes"
-        android:background="#FFF">
+        app:boxBackgroundColor="@color/colorDialogBackground">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_password_input"

@@ -11,9 +11,13 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
+import com.example.kotlininstagramfirebasechat.utils.ValueEventListenerAdapter
 import com.example.kotlininstagramfirebasechat.utils.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ServerValue
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         val TAG = MainActivity::class.java.simpleName
     }
 
+    private lateinit var db: DatabaseReference
     private var currentNavController: LiveData<NavController>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,16 +34,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         Log.d(TAG, "create")
+
+        db = FirebaseDatabase.getInstance().reference
+
         FirebaseHelper(this).auth.addAuthStateListener {
             if (it.currentUser == null) {
+                Log.d(TAG, "current user = null")
                 finish()
                 startActivity(Intent(this, StartActivity::class.java))
+            } else {
+                manageConnections()
+
             }
         }
 
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
+
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
@@ -83,6 +96,25 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return currentNavController?.value?.navigateUp() ?: false
+    }
+
+    private fun manageConnections() {
+        val connectionReference = db.child("connections")
+        val lastConnected = db.child("last-connected/${FirebaseAuth.getInstance().currentUser!!.uid}")
+        val infoConnected = db.child(".info/connected")
+
+        infoConnected.addValueEventListener(ValueEventListenerAdapter { data ->
+            data.getValue(Boolean::class.java).let {
+                if (it!!) {
+                    val con = connectionReference.child(FirebaseAuth.getInstance().currentUser!!.uid)
+                    con.setValue(java.lang.Boolean.TRUE)
+                    con.onDisconnect().removeValue()
+                    lastConnected.onDisconnect().setValue(ServerValue.TIMESTAMP)
+                }
+            }
+
+
+        })
     }
 
 }

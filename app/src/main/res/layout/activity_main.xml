@@ -19,6 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:labelVisibilityMode="unlabeled"
+        android:background="@color/colorBottomNavBackground"
+        app:itemIconTint="@drawable/bottom_nav_icon_color_selector"
         app:itemIconSize="30dp"
         app:menu="@menu/menu_bottom_nav" />
 

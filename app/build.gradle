@@ -47,7 +47,7 @@ dependencies {
     // Navigation and Lifecycle
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-    implementation "androidx.lifecycle:lifecycle-extensions:$nav_version"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
 
     // Material
@@ -59,8 +59,8 @@ dependencies {
     // Firebase
     implementation "com.google.firebase:firebase-core:17.2.2"
     implementation "com.google.firebase:firebase-auth:19.2.0"
-    implementation "com.google.firebase:firebase-storage:19.1.0"
-    implementation "com.google.firebase:firebase-database:19.2.0"
+    implementation "com.google.firebase:firebase-storage:19.1.1"
+    implementation "com.google.firebase:firebase-database:19.2.1"
 
     // Circle Image View
     implementation "de.hdodenhof:circleimageview:3.0.1"
