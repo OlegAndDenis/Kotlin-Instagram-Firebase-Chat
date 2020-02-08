@@ -23,9 +23,9 @@ class ChatsViewModel : ViewModel() {
         this.value = this.value
     }
 
-    fun updateMessages(key: String, user: User?, message: Message?) {
+    fun updateMessages(key: String, user: User?, message: Message?, isOnline: Boolean) {
         if (user != null && message != null) {
-            _chatsRows.value!![key] = ChatRow(user, message)
+            _chatsRows.value!![key] = ChatRow(user, message, isOnline)
             _chatsRows.notifyObserver()
             Log.d(TAG, "updateMessage $key $message")
         }

@@ -123,15 +123,16 @@ fun DataSnapshot.asUser(): User? = getValue(User::class.java)
 fun DataSnapshot.asFeedPost(): FeedPost? = getValue(FeedPost::class.java)
 fun DataSnapshot.asMessage(): Message? = getValue(Message::class.java)
 
-private fun TextView.setCaptionText(username: String, caption: String) {
-    val usernameSpannable = SpannableString(username)
-    usernameSpannable.setSpan(
-        StyleSpan(Typeface.BOLD),
-        0,
-        usernameSpannable.length,
-        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-    )
+//private fun TextView.setCaptionText(username: String, caption: String) {
+//    val usernameSpannable = SpannableString(username)
+//    usernameSpannable.setSpan(
+//        StyleSpan(Typeface.BOLD),
+//        0,
+//        usernameSpannable.length,
+//        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+//    )
+//
+//    text = SpannableStringBuilder().append(usernameSpannable).append(" ").append(caption)
+//    movementMethod = LinkMovementMethod.getInstance()
+//}
 
-    text = SpannableStringBuilder().append(usernameSpannable).append(" ").append(caption)
-    movementMethod = LinkMovementMethod.getInstance()
-}

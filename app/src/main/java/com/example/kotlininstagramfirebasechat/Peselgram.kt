@@ -22,7 +22,7 @@ class Peselgram : Application() {
 
     private fun manageConnections() {
         val connectionReference = db.child("connections")
-        val lastConnected = db.child("lastConnected/${FirebaseAuth.getInstance().currentUser!!.uid}")
+        val lastConnected = db.child("last-connected/${FirebaseAuth.getInstance().currentUser!!.uid}")
         val infoConnected = db.child(".info/connected")
 
         infoConnected.addValueEventListener(ValueEventListenerAdapter {data ->
@@ -30,7 +30,7 @@ class Peselgram : Application() {
                 if (it!!) {
                     val con = connectionReference.child(FirebaseAuth.getInstance().currentUser!!.uid)
                     con.setValue(java.lang.Boolean.TRUE)
-                    con.onDisconnect().setValue(java.lang.Boolean.FALSE)
+                    con.onDisconnect().removeValue()
                     lastConnected.onDisconnect().setValue(ServerValue.TIMESTAMP)
                 }
             }

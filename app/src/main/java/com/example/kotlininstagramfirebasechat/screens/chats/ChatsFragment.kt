@@ -43,14 +43,14 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         adapter.setOnItemClickListener { item, _ ->
             val row = item as ChatsAdapter
             findNavController().navigate(
-                ChatsFragmentDirections.actionChatsToChat(row.chatMessage.user.uid)
+                ChatsFragmentDirections.actionChatsToChat(row.chatRow.user.uid)
             )
         }
     }
 
     private fun refreshRecyclerView() {
         adapter.clear()
-        viewModel.chatsRows.value?.values?.forEach {
+        viewModel.chatsRows.value?.values?.sortedByDescending { it.message.timestamp }?.forEach {
             adapter.add(ChatsAdapter(it))
             Log.d(TAG, "adapter add: ${it.message.text}")
         }
@@ -62,10 +62,16 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         ref.addChildEventListener(ChildEventListenerAdapter { messageData ->
             Log.d(TAG, "latestMesssage call")
             val message = messageData.asMessage()
-            firebase.userReference(messageData.key!!).addListenerForSingleValueEvent(ValueEventListenerAdapter{userData ->
-                val user = userData.asUser()
-                viewModel.updateMessages(messageData.key!!, user, message)
-            })
+            firebase.userReference(messageData.key!!)
+                .addListenerForSingleValueEvent(ValueEventListenerAdapter { userData ->
+                    val user = userData.asUser()
+                    firebase.database.child("connections/${user!!.uid}")
+                        .addValueEventListener(ValueEventListenerAdapter {
+                            val isOnline = it.exists()
+                            viewModel.updateMessages(messageData.key!!, user, message, isOnline)
+                        })
+
+                })
         })
     }
 
