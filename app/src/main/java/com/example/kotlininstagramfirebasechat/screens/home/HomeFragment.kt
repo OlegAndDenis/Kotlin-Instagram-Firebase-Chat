@@ -11,9 +11,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.FeedPost
+import com.example.kotlininstagramfirebasechat.models.HomePost
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
 import com.example.kotlininstagramfirebasechat.utils.ValueEventListenerAdapter
 import com.example.kotlininstagramfirebasechat.utils.asFeedPost
+import com.example.kotlininstagramfirebasechat.utils.asUser
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -43,7 +45,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         firebase.database.child("subscriptions/$currentUid")
             .addListenerForSingleValueEvent(ValueEventListenerAdapter { data ->
-                viewModel.updateSubscriptions(data.children.map { it.key!! })
+                val subscriptions = data.children.map { it.key!! }
+                if (viewModel.subscriptions.value!! != subscriptions) {
+                    Log.d(TAG, "update subscriptions")
+                    viewModel.clearPosts()
+                    viewModel.updateSubscriptions(subscriptions)
+                }
                 Log.d(TAG, "children: ${data.children.count()}")
             })
 
@@ -51,24 +58,32 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             it.forEach { uid ->
                 Log.d(TAG, "subscriptions: ${it.last()}")
                 firebase.database.child("feed-posts/$uid")
-                    .addListenerForSingleValueEvent(ValueEventListenerAdapter {
-                        viewModel.updatePosts(it.children.map { it.asFeedPost()!! })
+                    .addListenerForSingleValueEvent(ValueEventListenerAdapter { dataPosts ->
+                        dataPosts.children.forEach { dataPost ->
+                            dataPost.asFeedPost()!!
+                            if (!viewModel.posts.value!!.containsKey(dataPost.key!!)) {
+                                Log.d(TAG, "update posts")
+                                val post = dataPost.asFeedPost()!!
+                                firebase.userReference(post.uid).addListenerForSingleValueEvent(ValueEventListenerAdapter{
+                                    viewModel.updatePosts(post, dataPost.key!!, it.asUser())
+                                })
+
+                            }
+                        }
+
                     })
             }
         })
 
-        viewModel.posts.observe(viewLifecycleOwner, Observer {posts ->
+        viewModel.posts.observe(viewLifecycleOwner, Observer { posts ->
             Log.d(TAG, posts.toString())
-            Log.d(TAG, posts.flatten().toString())
-            refreshRecycler(posts.flatten().sortedByDescending { it.timestampDate() })
-
+            refreshRecycler(posts.values.sortedByDescending { it.feedPost.timestampDate() })
         })
     }
 
-    private fun refreshRecycler(posts: List<FeedPost>?) {
+    private fun refreshRecycler(posts: List<HomePost>?) {
         adapter.clear()
         posts?.forEach {
-            Log.d(TAG, "adapter add: ${it.image}")
             adapter.add(HomeAdapter(it))
         }
     }
@@ -76,8 +91,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onDestroyView() {
         super.onDestroyView()
         Log.d(TAG, "destroy view")
-        viewModel.clearPosts()
-        viewModel.clearSubscriptions()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

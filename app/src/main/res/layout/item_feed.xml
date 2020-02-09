@@ -13,6 +13,7 @@
         tools:src="@drawable/portrait_placeholder" />
 
     <ImageView
+        android:adjustViewBounds="true"
         android:id="@+id/item_feed_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
