@@ -9,12 +9,12 @@ import java.util.*
  */
 object DateUtils {
 
-    val fullFormattedTime = SimpleDateFormat("d MMM, h:mm a", Locale.US) // the format of your date
-    val onlyTime = SimpleDateFormat("h:mm a", Locale.US) // the format of your date
-    val onlyDate = SimpleDateFormat("d MMM", Locale.US) // the format of your date
+    private val fullFormattedTime = SimpleDateFormat("d MMM, h:mm a", Locale.US)
+    private val onlyDate = SimpleDateFormat("d MMM", Locale.US)
+    private val onlyTime = SimpleDateFormat("h:mm a", Locale.US)
 
     fun getFormattedTime(timeInMilis: Long): String {
-        val date = Date(timeInMilis * 1000L) // *1000 is to convert seconds to milliseconds
+        val date = Date(timeInMilis)
 
         return when {
             isToday(date) -> onlyTime.format(date)
@@ -25,9 +25,7 @@ object DateUtils {
     }
 
     fun getFormattedTimeChatLog(timeInMilis: Long): String {
-        val date = Date(timeInMilis * 1000L) // *1000 is to convert seconds to milliseconds
-        val fullFormattedTime = SimpleDateFormat("d MMM, h:mm a", Locale.US) // the format of your date
-        val onlyTime = SimpleDateFormat("h:mm a", Locale.US) // the format of your date
+        val date = Date(timeInMilis)
 
         return when {
             isToday(date) -> onlyTime.format(date)
@@ -43,4 +41,5 @@ object DateUtils {
     private fun isToday(d: Date): Boolean {
         return DateUtils.isToday(d.time)
     }
+
 }

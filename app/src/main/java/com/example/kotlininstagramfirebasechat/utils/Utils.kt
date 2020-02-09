@@ -62,6 +62,7 @@ fun View.hideView() {
         }
 
     })
+
 }
 
 fun showToast(context: Context?, message: String?, duration: Int = Toast.LENGTH_SHORT) {

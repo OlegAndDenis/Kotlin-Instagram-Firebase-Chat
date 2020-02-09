@@ -27,8 +27,6 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
         setHasOptionsMenu(true)
 
         firebase = FirebaseHelper(context)
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,7 +34,7 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
 
         getUserData()
         getUserImage()
-        
+
         viewModel.user.observe(viewLifecycleOwner, Observer { updateView(it) })
 
         viewModel.images.observe(viewLifecycleOwner, Observer { updateImages(it) })
@@ -44,6 +42,7 @@ class MyProfileFragment : Fragment(R.layout.fragment_my_profile) {
         my_profile_to_edit_profile_button.setOnClickListener {
             findNavController().navigate(MyProfileFragmentDirections.actionMyProfileToEditProfile())
         }
+
     }
 
     private fun updateImages(images: List<String>) {

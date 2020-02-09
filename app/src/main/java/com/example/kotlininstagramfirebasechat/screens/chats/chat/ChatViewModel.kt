@@ -6,13 +6,17 @@ import androidx.lifecycle.ViewModel
 import com.example.kotlininstagramfirebasechat.models.User
 
 class ChatViewModel : ViewModel() {
-    private val _companionUser = MutableLiveData<User>()
-    val companionUser: LiveData<User>
+    private val _companionUser = MutableLiveData<User?>()
+    val companionUser: LiveData<User?>
         get() = _companionUser
 
     fun updateCompanionUser(user: User?) {
         if (user != null) {
             _companionUser.value = user
         }
+    }
+
+    fun clearUser() {
+        _companionUser.value = null
     }
 }
