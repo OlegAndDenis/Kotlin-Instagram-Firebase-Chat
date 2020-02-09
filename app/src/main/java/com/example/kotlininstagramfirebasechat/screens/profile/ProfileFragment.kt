@@ -44,17 +44,19 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        profile_chat_button.setOnClickListener {
-            findNavController().navigate(ProfileFragmentDirections.actionProfileToChat(uid))
-        }
-
-        profile_follow_button.setOnClickListener { follow() }
-
         viewModel.isFollow.observe(viewLifecycleOwner, Observer { updateButton(it) })
 
         viewModel.user.observe(viewLifecycleOwner, Observer { updateView(it) })
 
         viewModel.images.observe(viewLifecycleOwner, Observer { updateImages(it) })
+
+        profile_follow_button.setOnClickListener { follow() }
+
+        profile_chat_button.setOnClickListener { navigateToChat() }
+    }
+
+    private fun navigateToChat() {
+        findNavController().navigate(ProfileFragmentDirections.actionProfileToChat(uid))
     }
 
     private fun updateImages(images: List<String>) {

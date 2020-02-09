@@ -114,6 +114,11 @@ fun ImageView.loadImage(image: String?) =
         GlideApp.with(this).load(image).centerCrop().into(this)
     }
 
+fun ImageView.loadPostImage(image: String?) =
+    ifNotDestroyed {
+        GlideApp.with(this).load(image).into(this)
+    }
+
 private fun View.ifNotDestroyed(block: () -> Unit) {
     if (!(context as Activity).isDestroyed) {
         block()
