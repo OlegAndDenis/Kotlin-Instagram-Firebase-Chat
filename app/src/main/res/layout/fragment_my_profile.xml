@@ -17,33 +17,30 @@
             android:layout_width="125dp"
             android:layout_height="125dp"
             android:layout_marginTop="50dp"
-            android:src="@drawable/portrait_placeholder"
-            app:civ_border_color="@color/colorPrimary"
-            app:civ_border_width="2dp" />
+            android:src="@drawable/portrait_placeholder" />
 
         <TextView
             android:id="@+id/my_profile_name"
+            style="@style/TextPrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/standard_margin"
             android:layout_marginTop="@dimen/standard_margin"
             android:layout_marginEnd="@dimen/standard_margin"
-            android:textSize="18sp"
             tools:text="Denis" />
 
         <TextView
             android:id="@+id/my_profile_bio"
+            style="@style/TextSecondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/standard_margin"
             android:layout_marginEnd="@dimen/standard_margin"
-            android:textColor="@color/colorSecondaryText"
-            android:textSize="16sp"
             tools:text="Hi! I am Denis and it is beautiful" />
 
         <Button
             android:id="@+id/my_profile_to_edit_profile_button"
-            style="@style/ButtonSizes"
+            style="@style/WideButton"
             android:text="@string/edit_profile" />
 
         <androidx.recyclerview.widget.RecyclerView

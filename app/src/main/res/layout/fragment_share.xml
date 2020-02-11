@@ -19,8 +19,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/share_capture_input_layout"
-            style="@style/mainTextInputSizes"
-            android:background="#fafafa">
+            style="@style/mainTextInputSizes">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/share_capture_input"

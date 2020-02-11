@@ -14,7 +14,7 @@
         android:layout_gravity="end"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="18dp"
-        android:textSize="12sp"
+        style="@style/TextTimeChat"
         tools:text="16 Sep, 2:05 PM" />
 
     <TextView
@@ -29,7 +29,7 @@
         android:paddingTop="8dp"
         android:paddingEnd="26dp"
         android:paddingBottom="8dp"
-        android:textSize="16sp"
+        style="@style/TextPrimaryChat"
         tools:text="This is my message that will wrap into multiple lines and keep going" />
 
 </LinearLayout>

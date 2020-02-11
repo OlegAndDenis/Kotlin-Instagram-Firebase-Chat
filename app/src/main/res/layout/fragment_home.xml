@@ -4,13 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".screens.home.HomeFragment">
+    tools:context=".screens.home.HomeFragment"
+    android:background="@color/colorHomeBackground">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <TextView
+        android:id="@+id/home_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        style="@style/TextPrimary"
+        android:padding="16dp"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:background="@color/colorBackground"
+        android:text="@string/home_placeholder" />
 
     <include layout="@layout/progress_bar" />
 

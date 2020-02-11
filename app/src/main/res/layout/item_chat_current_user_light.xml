@@ -18,7 +18,7 @@
         android:paddingTop="8dp"
         android:paddingEnd="26dp"
         android:paddingBottom="8dp"
-        android:textSize="16sp"
+        style="@style/TextPrimaryChat"
         tools:text="This is my message thadfh dfdh f dfh df df " />
 
 </FrameLayout>

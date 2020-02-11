@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="70dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="?attr/selectableItemBackground">
 
     <FrameLayout
         android:layout_width="54dp"
@@ -44,6 +45,7 @@
 
             <TextView
                 android:id="@+id/username_textview_latest_message"
+                style="@style/TextPrimary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -52,7 +54,6 @@
                 android:layout_weight="1"
                 android:lines="1"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="Username" />
 
@@ -61,22 +62,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
+                style="@style/TextTime"
                 android:layout_marginEnd="16dp"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="13sp"
+                android:textSize="14sp"
                 tools:text="16 Sep, 2:05 PM" />
 
         </LinearLayout>
 
         <TextView
             android:id="@+id/latest_message_textview"
+            style="@style/TextSecondary"
             android:layout_width="wrap_content"
             android:layout_height="34dp"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="16dp"
             android:lines="1"
-            android:textColor="@color/colorSecondaryText"
-            android:textSize="16sp"
             tools:text="Latest message" />
 
         <View

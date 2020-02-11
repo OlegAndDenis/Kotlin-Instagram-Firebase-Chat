@@ -13,6 +13,7 @@ import com.example.kotlininstagramfirebasechat.utils.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_chats.*
+import kotlinx.android.synthetic.main.progress_bar.*
 
 class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
@@ -59,12 +60,16 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
     private fun listenForLatestMessages() {
         val fromId = firebase.auth.uid ?: return
         val ref = firebase.latestMessages(fromId, "")
+
         ref.addChildEventListener(ChildEventListenerAdapter { messageData ->
             Log.d(TAG, "latestMesssage call")
+
             val message = messageData.asMessage()
+
             firebase.userReference(messageData.key!!)
                 .addListenerForSingleValueEvent(ValueEventListenerAdapter { userData ->
                     val user = userData.asUser()
+
                     firebase.database.child("connections/${user!!.uid}")
                         .addValueEventListener(ValueEventListenerAdapter {
                             val isOnline = it.exists()

@@ -24,7 +24,7 @@
         android:id="@+id/username_textview_new_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        style="@style/TextPrimary"
         android:layout_marginStart="16dp"
         tools:text="Username" />
 </LinearLayout>

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.chats.chat.ChatFragment">
+    tools:context=".screens.chats.chat.ChatFragment"
+    android:background="@color/colorChatBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,7 +15,6 @@
             android:id="@+id/chat_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/colorChatBackground"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/chat_container"
             app:layout_constraintEnd_toEndOf="parent"
@@ -27,8 +27,8 @@
             android:id="@+id/chat_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorBottomNavBackground"
             android:orientation="horizontal"
+            android:background="@color/colorCompanionChatBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +45,6 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/colorPrimaryText"
-                android:textColorHint="@color/colorSecondaryText"
                 android:hint="@string/type_a_message"
                 android:importantForAutofill="no"
                 tools:ignore="TextFields" />

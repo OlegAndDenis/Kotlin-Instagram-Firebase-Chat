@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorInputBoxBackground"
     tools:context=".screens.profile.editProfile.EditProfileFragment">
 
     <ScrollView
@@ -23,9 +22,7 @@
                 android:layout_width="125dp"
                 android:layout_height="125dp"
                 android:layout_marginTop="50dp"
-                android:src="@drawable/portrait_placeholder"
-                app:civ_border_color="@color/colorAccent"
-                app:civ_border_width="2dp" />
+                android:src="@drawable/portrait_placeholder" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -37,7 +34,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edit_profile_name_input_layout"
-                app:boxBackgroundColor="@color/colorInputBoxBackground"
                 style="@style/mainTextInputSizes">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -51,7 +47,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edit_profile_email_input_layout"
-                app:boxBackgroundColor="@color/colorInputBoxBackground"
                 style="@style/mainTextInputSizes">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -65,7 +60,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/edit_profile_bio_input_layout"
-                app:boxBackgroundColor="@color/colorInputBoxBackground"
                 style="@style/mainTextInputSizes"
                 app:helperText="@string/bio_helper_text">
 
@@ -79,6 +73,12 @@
                     android:maxLength="120"
                     android:maxLines="3" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <Switch
+                android:layout_marginTop="20dp"
+                android:id="@+id/edit_profile_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
     </ScrollView>

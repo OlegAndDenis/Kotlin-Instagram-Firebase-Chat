@@ -15,6 +15,7 @@ import com.example.kotlininstagramfirebasechat.utils.*
 import com.google.firebase.database.ServerValue
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_share.*
+import kotlinx.android.synthetic.main.progress_bar.*
 import java.lang.Exception
 import java.util.*
 
@@ -34,7 +35,12 @@ class ShareFragment : Fragment(R.layout.fragment_share) {
 
         camera = CameraHelper(this)
         firebase = FirebaseHelper(context)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        camera.takeCameraPicture()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -45,12 +51,6 @@ class ShareFragment : Fragment(R.layout.fragment_share) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.share) share()
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        camera.takeCameraPicture()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -67,39 +67,59 @@ class ShareFragment : Fragment(R.layout.fragment_share) {
     private fun share() {
         val uri = if (imageUri != null) imageUri else null
         if (uri != null) {
+            progress_bar.showView()
             val uid = firebase.auth.currentUser!!.uid
-            firebase.storage.child("users").child(uid).child("images")
-                .child(uri.lastPathSegment ?: return).putFile(uri).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        firebase.storageShare(uri).addOnCompleteListener {
-                            val imageUrl = it.result.toString()
-                            firebase.database.child("feed-posts").child(uid)
-                                .push()
-                                .setValue(mkFeedPost(uid, imageUrl))
-                                .addOnCompleteListener {
-                                    if (it.isSuccessful) {
-                                        // go to Home
-                                        imageUri = null
-                                    }
-                                }
-                        }
-                    } else {
-                        showToast(context, it.exception!!.message!!)
-                    }
-                }
+            updateStorage(uid, uri)
         }
     }
 
-    private fun mkFeedPost(
-        uid: String,
-        imageUrl: String
-    ): FeedPost {
-        return FeedPost(
+    private fun updateStorage(uid: String, uri: Uri) {
+        firebase.storage.child("users").child(uid).child("images")
+            .child(uri.lastPathSegment ?: return).putFile(uri).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    downloadImage(uri, uid)
+                } else {
+                    showToast(context, it.exception?.message)
+                    progress_bar.hideView()
+                }
+            }
+    }
+
+    private fun downloadImage(uri: Uri, uid: String) {
+        firebase.storageShare(uri).addOnCompleteListener {
+            val imageUrl = it.result.toString()
+            updateDatabase(uid, imageUrl)
+        }
+    }
+
+    private fun updateDatabase(uid: String, imageUrl: String) {
+        firebase.database.child("feed-posts").child(uid)
+            .push()
+            .setValue(mkFeedPost(uid, imageUrl))
+            .addOnCompleteListener {
+                progress_bar.hideView()
+                if (it.isSuccessful) clearViews() else showToast(context, it.exception?.message)
+            }
+    }
+
+    private fun clearViews() {
+        imageUri = null
+        share_image.setImageResource(R.drawable.portrait_placeholder)
+        share_capture_input.setText("")
+    }
+
+    private fun mkFeedPost(uid: String, imageUrl: String) =
+        FeedPost(
             uid = uid,
             image = imageUrl,
             caption = share_capture_input.text.toString()
         )
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        clearViews()
     }
-
-
 }
+
+
+

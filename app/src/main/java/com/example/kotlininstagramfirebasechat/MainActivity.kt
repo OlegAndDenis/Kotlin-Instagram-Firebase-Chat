@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         val TAG = MainActivity::class.java.simpleName
     }
 
-    private lateinit var db: DatabaseReference
     private var currentNavController: LiveData<NavController>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,16 +34,11 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(TAG, "create")
 
-        db = FirebaseDatabase.getInstance().reference
-
         FirebaseHelper(this).auth.addAuthStateListener {
             if (it.currentUser == null) {
                 Log.d(TAG, "current user = null")
                 finish()
                 startActivity(Intent(this, StartActivity::class.java))
-            } else {
-                manageConnections()
-
             }
         }
 
@@ -60,6 +54,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigationBar() {
+
+        if (FirebaseHelper(this).auth.currentUser == null) return
+
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
 
         val navGraphIds = listOf(R.navigation.home, R.navigation.share, R.navigation.search, R.navigation.profile)
@@ -96,25 +93,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return currentNavController?.value?.navigateUp() ?: false
-    }
-
-    private fun manageConnections() {
-        val connectionReference = db.child("connections")
-        val lastConnected = db.child("last-connected/${FirebaseAuth.getInstance().currentUser!!.uid}")
-        val infoConnected = db.child(".info/connected")
-
-        infoConnected.addValueEventListener(ValueEventListenerAdapter { data ->
-            data.getValue(Boolean::class.java).let {
-                if (it!!) {
-                    val con = connectionReference.child(FirebaseAuth.getInstance().currentUser!!.uid)
-                    con.setValue(java.lang.Boolean.TRUE)
-                    con.onDisconnect().removeValue()
-                    lastConnected.onDisconnect().setValue(ServerValue.TIMESTAMP)
-                }
-            }
-
-
-        })
     }
 
 }

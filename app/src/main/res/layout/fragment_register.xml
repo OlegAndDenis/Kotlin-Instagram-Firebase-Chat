@@ -10,14 +10,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorInputBoxBackground"
         android:gravity="center"
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/register_name_input_layout"
             style="@style/startTextInputSizes"
-            app:boxBackgroundColor="@color/colorInputBoxBackground"
             app:layout_constraintBottom_toTopOf="@id/register_email_input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +34,6 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/register_email_input_layout"
             style="@style/startTextInputSizes"
-            app:boxBackgroundColor="@color/colorInputBoxBackground"
             app:layout_constraintBottom_toTopOf="@id/register_password_input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +51,6 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/register_password_input_layout"
             style="@style/startTextInputSizes"
-            app:boxBackgroundColor="@color/colorInputBoxBackground"
             app:layout_constraintBottom_toTopOf="@id/register_sign_up_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +67,7 @@
 
         <Button
             android:id="@+id/register_sign_up_button"
-            style="@style/ButtonSizes"
+            style="@style/WideButton"
             android:stateListAnimator="@animator/button_animator"
             android:text="@string/sign_up"
             app:layout_constraintBottom_toBottomOf="parent"

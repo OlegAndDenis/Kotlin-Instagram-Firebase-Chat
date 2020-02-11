@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1f1f1f</color>
-    <color name="colorPrimaryDark">#121212</color>
+    <color name="colorPrimary">#80deea</color>
+    <color name="colorHomeBackground">#000</color>
+    <color name="colorPrimaryDark">#000</color>
     <color name="colorAccent">#FF5252</color>
-    <color name="colorLightPrimary">#111d1e</color>
-    <color name="colorDivider">#1f1f1f</color>
-    <color name="colorPrimaryText">#FFF</color>
+<!--    <color name="colorLightPrimary">#111d1e</color>-->
+    <color name="colorDivider">#000</color>
+    <color name="colorPrimaryText">#dedede</color>
     <color name="colorSecondaryText">#a0a0a0</color>
     <color name="colorBackground">#121212</color>
-    <color name="colorDialogBackground">#FFF</color>
-    <color name="colorInputBoxBackground">#6c6c6c</color>
+<!--    <color name="colorDialogBackground">#121212</color>-->
+<!--    <color name="colorInputBoxBackground">#6c6c6c</color>-->
     <color name="colorChatBackground">#121212</color>
-    <color name="colorBottomNavBackground">#1f1f1f</color>
-    <color name="colorBottomNavIconActive">#FFF</color>
-    <color name="colorBottomNavIconInactive">#6c6c6c</color>
+<!--    <color name="colorBottomNavBackground">#1f1f1f</color>-->
+<!--    <color name="colorBottomNavIconActive">#FFF</color>-->
+<!--    <color name="colorBottomNavIconInactive">#6c6c6c</color>-->
     <color name="colorCurrentChatBackground">#567081</color>
     <color name="colorCompanionChatBackground">#1f1f1f</color>
-    <color name="colorSendIcon">#FFF</color>
+    <color name="colorIcon">#dedede</color>
+    <color name="colorProgressBar">#11FFFFFF</color>
 </resources>

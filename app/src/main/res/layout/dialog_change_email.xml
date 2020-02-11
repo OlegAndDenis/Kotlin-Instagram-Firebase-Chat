@@ -7,8 +7,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edit_profile_bio_input_layout"
-        style="@style/mainTextInputSizes"
-        app:boxBackgroundColor="@color/colorDialogBackground">
+        style="@style/mainTextInputSizes">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_password_input"

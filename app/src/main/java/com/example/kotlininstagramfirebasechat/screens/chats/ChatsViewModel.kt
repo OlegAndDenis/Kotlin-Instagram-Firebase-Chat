@@ -5,19 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.kotlininstagramfirebasechat.models.ChatRow
+import com.example.kotlininstagramfirebasechat.models.FeedPost
 import com.example.kotlininstagramfirebasechat.models.Message
 import com.example.kotlininstagramfirebasechat.models.User
 import com.example.kotlininstagramfirebasechat.screens.chats.ChatsFragment.Companion.TAG
 
 class ChatsViewModel : ViewModel() {
 
-    private val _chatsRows = MutableLiveData<HashMap<String, ChatRow>>()
+
+    private val _chatsRows = MutableLiveData(HashMap<String, ChatRow>())
     val chatsRows: LiveData<HashMap<String, ChatRow>>
         get() = _chatsRows
-
-    init {
-        _chatsRows.value = HashMap()
-    }
 
     private fun <T> MutableLiveData<T>.notifyObserver() {
         this.value = this.value

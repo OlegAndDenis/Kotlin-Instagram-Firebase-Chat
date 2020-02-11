@@ -17,9 +17,7 @@
             android:layout_width="125dp"
             android:layout_height="125dp"
             android:layout_marginTop="50dp"
-            android:src="@drawable/portrait_placeholder"
-            app:civ_border_color="@color/colorAccent"
-            app:civ_border_width="2dp" />
+            android:src="@drawable/portrait_placeholder" />
 
         <TextView
             android:id="@+id/profile_name"
@@ -28,7 +26,7 @@
             android:layout_marginStart="@dimen/standard_margin"
             android:layout_marginTop="@dimen/standard_margin"
             android:layout_marginEnd="@dimen/standard_margin"
-            android:textSize="18sp"
+            style="@style/TextPrimary"
             tools:text="Denis" />
 
         <TextView
@@ -36,8 +34,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/standard_margin"
+            style="@style/TextSecondary"
             android:layout_marginEnd="@dimen/standard_margin"
-            android:textColor="@color/colorSecondaryText"
             android:textSize="16sp"
             tools:text="Hi! I am Denis and it is beautiful" />
 

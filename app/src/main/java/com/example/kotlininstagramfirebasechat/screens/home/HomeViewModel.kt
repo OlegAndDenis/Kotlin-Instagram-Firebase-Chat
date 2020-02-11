@@ -18,7 +18,7 @@ class HomeViewModel : ViewModel() {
 
     fun updatePosts(post: FeedPost, key: String, user: User?) {
         if (user != null) {
-            _posts.value!![key] = HomePost(post, user)
+            _posts.value!![key] = HomePost(post, user, key)
             _posts.notifyObserver()
         }
     }
