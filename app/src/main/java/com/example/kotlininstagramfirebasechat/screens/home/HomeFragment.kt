@@ -11,6 +11,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.HomePost
 import com.example.kotlininstagramfirebasechat.utils.*
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -58,14 +61,36 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 progress_bar.hideView()
             })
 
+//        viewModel.subscriptions.observe(viewLifecycleOwner, Observer {
+//            it.forEach { uid ->
+//                Log.d(TAG, "subscriptions: ${it.last()}")
+//                firebase.database.child("feed-posts/$uid")
+//                    .addValueEventListener(ValueEventListenerAdapter { dataPosts ->
+//                        dataPosts.children.forEach { dataPost ->
+//                            dataPost.asFeedPost()!!
+//                            if (!viewModel.posts.value!!.containsKey(dataPost.key!!)) {
+//                                Log.d(TAG, "update posts")
+//                                val post = dataPost.asFeedPost()!!
+//                                firebase.userReference(post.uid)
+//                                    .addListenerForSingleValueEvent(ValueEventListenerAdapter {
+//                                        viewModel.updatePosts(post, dataPost.key!!, it.asUser())
+//                                    })
+//
+//                            }
+//                        }
+//                    })
+//            }
+//        })
+
         viewModel.subscriptions.observe(viewLifecycleOwner, Observer {
+
             it.forEach { uid ->
                 Log.d(TAG, "subscriptions: ${it.last()}")
                 firebase.database.child("feed-posts/$uid")
-                    .addValueEventListener(ValueEventListenerAdapter { dataPosts ->
+                    .addListenerForSingleValueEvent(ValueEventListenerAdapter { dataPosts ->
                         dataPosts.children.forEach { dataPost ->
                             dataPost.asFeedPost()!!
-//                            if (!viewModel.posts.value!!.containsKey(dataPost.key!!)) {
+                            if (!viewModel.posts.value!!.containsKey(dataPost.key!!)) {
                                 Log.d(TAG, "update posts")
                                 val post = dataPost.asFeedPost()!!
                                 firebase.userReference(post.uid)
@@ -73,8 +98,32 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                                         viewModel.updatePosts(post, dataPost.key!!, it.asUser())
                                     })
 
-//                            }
+                            }
                         }
+                    })
+            }
+
+            it.forEach { uid ->
+                firebase.database.child("feed-posts/$uid")
+                    .addChildEventListener(object : ChildEventListener {
+                        override fun onCancelled(p0: DatabaseError) {}
+
+                        override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
+
+                        override fun onChildChanged(dataPost: DataSnapshot, p1: String?) {
+                            Log.d(TAG, "changed")
+                            Log.d(TAG, "update posts")
+                            val post = dataPost.asFeedPost()!!
+                            firebase.userReference(post.uid)
+                                .addListenerForSingleValueEvent(ValueEventListenerAdapter {
+                                    viewModel.updatePosts(post, dataPost.key!!, it.asUser())
+                                })
+                        }
+
+                        override fun onChildAdded(dataPost: DataSnapshot, p1: String?) {}
+
+                        override fun onChildRemoved(p0: DataSnapshot) {}
+
                     })
             }
         })

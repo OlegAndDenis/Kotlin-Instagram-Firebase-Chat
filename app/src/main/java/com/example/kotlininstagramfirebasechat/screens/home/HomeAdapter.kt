@@ -29,6 +29,12 @@ class HomeAdapter(private val post: HomePost, val likeClickListener: (HomePost) 
             item_feed_caption.text = post.feedPost.caption
             item_feed_like.setOnClickListener { likeClickListener(post) }
 
+            val likesCount = post.feedPost.likes.size
+
+            item_feed_likes_count.text = if (likesCount != 0) {
+                 likesCount.toString()
+            } else ""
+
             item_feed_like.setImageResource(
                 if (post.feedPost.likes.containsKey(FirebaseAuth.getInstance().currentUser!!.uid)) {
                     R.drawable.ic_like_active

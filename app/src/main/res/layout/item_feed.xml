@@ -62,11 +62,29 @@
             android:padding="10dp"
             android:src="@drawable/ic_like" />
 
+        <TextView
+            android:id="@+id/item_feed_likes_count"
+            style="@style/TextSecondary"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textStyle="bold"
+            tools:text="32" />
+
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:padding="10dp"
             android:src="@drawable/ic_comment" />
+
+        <TextView
+            android:id="@+id/item_feed_comments_count"
+            style="@style/TextSecondary"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textStyle="bold"
+            android:gravity="center"
+            tools:text="4" />
 
         <ImageView
             android:layout_width="50dp"
