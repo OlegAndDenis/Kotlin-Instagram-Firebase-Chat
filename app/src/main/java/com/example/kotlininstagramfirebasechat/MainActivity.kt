@@ -1,6 +1,6 @@
 package com.example.kotlininstagramfirebasechat
 
-import android.content.Context
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,13 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.kotlininstagramfirebasechat.utils.FirebaseHelper
-import com.example.kotlininstagramfirebasechat.utils.ValueEventListenerAdapter
 import com.example.kotlininstagramfirebasechat.utils.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ServerValue
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -27,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var currentNavController: LiveData<NavController>? = null
+    private lateinit var firebase: FirebaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,12 +30,11 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(TAG, "create")
 
-        FirebaseHelper(this).auth.addAuthStateListener {
-            if (it.currentUser == null) {
-                Log.d(TAG, "current user = null")
-                finish()
-                startActivity(Intent(this, StartActivity::class.java))
-            }
+        firebase = FirebaseHelper(baseContext)
+        if (firebase.auth.currentUser == null) {
+            startActivity(Intent(this, StartActivity::class.java))
+            finish()
+            return
         }
 
         if (savedInstanceState == null) {
@@ -48,15 +43,22 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        firebase.auth.addAuthStateListener {
+            if (it.currentUser == null) {
+                startActivity(Intent(this, StartActivity::class.java))
+                finish()
+            }
+        }
+    }
+
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState!!)
         setupBottomNavigationBar()
     }
 
     private fun setupBottomNavigationBar() {
-
-        if (FirebaseHelper(this).auth.currentUser == null) return
-
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
 
         val navGraphIds = listOf(R.navigation.home, R.navigation.share, R.navigation.search, R.navigation.profile)
