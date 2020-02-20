@@ -61,6 +61,7 @@ dependencies {
     implementation "com.google.firebase:firebase-auth:19.2.0"
     implementation "com.google.firebase:firebase-storage:19.1.1"
     implementation "com.google.firebase:firebase-database:19.2.1"
+    implementation 'com.firebaseui:firebase-ui-database:4.2.0'
 
     // Circle Image View
     implementation "de.hdodenhof:circleimageview:3.0.1"

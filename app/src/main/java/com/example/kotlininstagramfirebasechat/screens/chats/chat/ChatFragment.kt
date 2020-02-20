@@ -2,27 +2,36 @@ package com.example.kotlininstagramfirebasechat.screens.chats.chat
 
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlininstagramfirebasechat.MainActivity
 import com.example.kotlininstagramfirebasechat.R
 import com.example.kotlininstagramfirebasechat.models.Message
 import com.example.kotlininstagramfirebasechat.models.User
 import com.example.kotlininstagramfirebasechat.utils.*
+import com.firebase.ui.database.FirebaseRecyclerAdapter
+import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_chat.*
+import kotlinx.android.synthetic.main.item_chat_companion_user.view.*
+import kotlinx.android.synthetic.main.item_chat_companion_user_light.view.*
+import kotlinx.android.synthetic.main.item_chat_current_user.view.*
+import kotlinx.android.synthetic.main.item_chat_current_user_light.view.*
 import kotlinx.android.synthetic.main.progress_bar.*
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
-import java.lang.Exception
 
 class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventListener {
+
+    class MessageViewHolder(v: View) : RecyclerView.ViewHolder(v)
 
     companion object {
         val TAG = ChatFragment::class.java.simpleName
@@ -31,7 +40,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
     private lateinit var listener: ValueEventListener
     private lateinit var currentUid: String
     private lateinit var firebase: FirebaseHelper
-    private val adapter = GroupAdapter<ViewHolder>()
+    private lateinit var mFirebaseAdapter: FirebaseRecyclerAdapter<Message, MessageViewHolder>
+    private lateinit var mLinearLayoutManager: LinearLayoutManager
     private val viewModel: ChatViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,19 +61,17 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
             isConnected(uid)
         }
 
-        chat_recyclerview.adapter = adapter
+        mLinearLayoutManager = LinearLayoutManager(context)
+        mLinearLayoutManager.stackFromEnd = true
+        chat_recyclerview.layoutManager = mLinearLayoutManager
 
         KeyboardVisibilityEvent.setEventListener(activity as MainActivity, this)
         coordinateImgBtnAndInputs(chat_send_button, chat_message_input)
 
-        chat_send_button.setOnClickListener {
-            sendMessage()
-        }
+        chat_send_button.setOnClickListener { sendMessage() }
 
         viewModel.companionUser.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                listenForMessages(it)
-            }
+            if (it != null) listenForMessages(it)
         })
     }
 
@@ -105,24 +113,110 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
     }
 
     private fun listenForMessages(companionUser: User) {
-        var sameUser = ""
 
-        firebase.messages(currentUid, companionUser.uid)
-            .addChildEventListener(ChildEventListenerAdapter { data ->
-                data.asMessage()?.let {
-                    adapter.add(
+        val messagesRef: DatabaseReference = firebase.messages(currentUid, companionUser.uid)
+        val options: FirebaseRecyclerOptions<Message> =
+            FirebaseRecyclerOptions.Builder<Message>()
+                .setQuery(messagesRef, Message::class.java)
+                .setLifecycleOwner(this)
+                .build()
+
+
+
+        mFirebaseAdapter = object : FirebaseRecyclerAdapter<Message, MessageViewHolder>(options) {
+
+            override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): MessageViewHolder {
+                val inflater = LayoutInflater.from(viewGroup.context)
+                return MessageViewHolder(inflater.inflate(i, viewGroup, false))
+            }
+
+            override fun getItemViewType(position: Int): Int {
+                val userUid = getItem(position).uid
+
+                return when {
+                    position != 0 -> {
+                        val previousItemUid = getItem(position - 1).uid
+
                         when {
-                            it.uid == sameUser && it.uid == currentUid -> CurrentUserItemLight(it.text)
-                            it.uid == currentUid -> CurrentUserItem(it.text, it.timestamp)
-                            it.uid == sameUser -> CompanionUserItemLight(it.text)
-                            else -> CompanionUserItem(it.text, companionUser.photo, it.timestamp)
+                            userUid == previousItemUid && userUid == currentUid -> R.layout.item_chat_current_user_light
+                            userUid == currentUid -> R.layout.item_chat_current_user
+                            userUid == previousItemUid -> R.layout.item_chat_companion_user_light
+                            else -> R.layout.item_chat_companion_user
                         }
-                    )
-
-                    if (it.uid != sameUser) sameUser = it.uid
+                    }
+                    userUid == currentUid -> R.layout.item_chat_current_user
+                    else -> R.layout.item_chat_companion_user
                 }
-                scrollChatDown()
-            })
+            }
+
+            override fun onBindViewHolder(
+                viewHolder: MessageViewHolder,
+                position: Int,
+                friendlyMessage: Message
+            ) {
+                when (viewHolder.itemViewType) {
+                    R.layout.item_chat_current_user_light ->
+                        viewHolder.itemView.textview_from_row_light.text = friendlyMessage.text
+
+                    R.layout.item_chat_current_user -> {
+                        viewHolder.itemView.run {
+                            textview_from_row.text = friendlyMessage.text
+                            from_msg_time.text =
+                                DateUtils.getFormattedTimeChatLog(friendlyMessage.timestamp)
+                        }
+                    }
+
+                    R.layout.item_chat_companion_user_light ->
+                        viewHolder.itemView.textview_to_row_light.text = friendlyMessage.text
+
+                    R.layout.item_chat_companion_user -> {
+                        viewHolder.itemView.run {
+                            imageview_chat_to_row.loadUserPhoto(companionUser.photo)
+                            textview_to_row.text = friendlyMessage.text
+                            to_msg_time.text =
+                                DateUtils.getFormattedTimeChatLog(friendlyMessage.timestamp)
+                        }
+                    }
+                }
+
+            }
+
+        }
+
+        mFirebaseAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                super.onItemRangeInserted(positionStart, itemCount)
+                val friendlyMessageCount = mFirebaseAdapter.itemCount
+                val lastVisiblePosition: Int = mLinearLayoutManager.findLastCompletelyVisibleItemPosition()
+                if (lastVisiblePosition == -1 ||
+                    positionStart >= friendlyMessageCount - 1 &&
+                    lastVisiblePosition == positionStart - 1
+                ) {
+                    chat_recyclerview.scrollToPosition(positionStart)
+                }
+            }
+        })
+
+        chat_recyclerview.adapter = mFirebaseAdapter
+
+//        var sameUser = ""
+//
+//        firebase.messages(currentUid, companionUser.uid)
+//            .addChildEventListener(ChildEventListenerAdapter { data ->
+//                data.asMessage()?.let {
+//                    adapter.add(
+//                        when {
+//                            it.uid == sameUser && it.uid == currentUid -> CurrentUserItemLight(it.text)
+//                            it.uid == currentUid -> CurrentUserItem(it.text, it.timestamp)
+//                            it.uid == sameUser -> CompanionUserItemLight(it.text)
+//                            else -> CompanionUserItem(it.text, companionUser.photo, it.timestamp)
+//                        }
+//                    )
+//
+//                    if (it.uid != sameUser) sameUser = it.uid
+//                }
+//                scrollChatDown()
+//            })
     }
 
     private fun getLastConnected(uid: String) {
@@ -148,11 +242,11 @@ class ChatFragment : Fragment(R.layout.fragment_chat), KeyboardVisibilityEventLi
     override fun onVisibilityChanged(isOpen: Boolean) = scrollChatDown()
 
     private fun scrollChatDown() {
-        try {
-            chat_recyclerview.scrollToPosition(adapter.itemCount - 1)
-        } catch (e: Exception) {
-            Log.d(TAG, e.message ?: return)
-        }
+//        try {
+//            chat_recyclerview.scrollToPosition(adapter.itemCount - 1)
+//        } catch (e: Exception) {
+//            Log.d(TAG, e.message ?: return)
+//        }
     }
 
     override fun onDestroyView() {

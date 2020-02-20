@@ -91,7 +91,7 @@ class FirebaseHelper(val context: Context?) {
 
     fun images(uid: String = auth.currentUser!!.uid) = database.child("/feed-posts/$uid")
 
-    fun isConnected(uid: String) = database.child("connection/$uid")
+    fun isConnected(uid: String) = database.child("connections/$uid")
     fun lastConnected(uid: String) = database.child("last-connected/${uid}")
 
     fun storageShare(uri: Uri) =
